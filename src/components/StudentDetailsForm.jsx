@@ -259,7 +259,7 @@ const StudentDetailsForm = ({
                   className="mt-1 px-2 py-1 block w-full border border-gray-300 rounded-md shadow-sm"
                 />
               </div>
-              <div className="flex justify-end w-full col-span-2">
+              <div className="flex justify-end w-full col-span-2 absolute bottom-5 right-5">
                 <button
                   type="submit"
                   className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm">

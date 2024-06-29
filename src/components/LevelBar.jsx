@@ -137,12 +137,12 @@ const LevelBar = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center mt-2">
+    <div className="flex flex-col md:flex-row  items-center">
+      <div className="flex md:flex-col justify-center items-center ">
         {steps.map((item, index) => (
           <React.Fragment key={index}>
             <div
-              className={`flex items-center w-full text-white ${
+              className={`flex md:pl-20 md:flex-col items-center w-full text-white ${
                 index > activeStep ? "text-blue-500" : ""
               }`}>
               <div
@@ -157,7 +157,7 @@ const LevelBar = () => {
                 <div
                   className={`${
                     index < activeStep ? "bg-orange-500 " : "bg-gray-300"
-                  } h-0.5  mx-2 w-16 md:w-24 lg:w-40 xl:w-72 transition-all duration-500`}
+                  } h-1 md:h-52 w-20 md:w-1 transition-all duration-500`}
                 />
               )}
             </div>
