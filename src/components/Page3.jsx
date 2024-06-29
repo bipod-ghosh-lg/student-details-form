@@ -19,8 +19,10 @@ const Page3 = ({
 }) => {
   return (
     <div
-      className={`flex-col md:flex-row justify-center h-full w-full  overflow-hidden ${activeStep === 2 ? "flex" : "hidden"} text-sm ${animationClass} overflow-hidden`}>
-      <div className="bg-yellow-400 rounded-lg md:rounded-r-none w-full md:w-[37%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700">
+      className={`flex-col md:flex-row justify-center h-full w-full  overflow-y-auto pb-5 md:pb-0 ${
+        activeStep === 2 ? "flex" : "hidden"
+      } text-sm ${animationClass} overflow-hidden`}>
+      <div className="bg-yellow-400 rounded-lg md:rounded-r-none w-full md:w-[60%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700">
         <div className="h-40 w-40 bg-orange-500 rounded-full p-4 overflow-hidden">
           {formData.gender === "Female" ? (
             formData.profesion === "student" ? (
@@ -34,12 +36,12 @@ const Page3 = ({
             <img src={workingMaleImg} alt="Working Male" className="" />
           )}
         </div>
-        <div className="grid grid-cols-1 gap-2 text-nowrap text-xs">
-          <div className="bg-white rounded-lg p-2 justify-start flex items-center gap-2 overflow-x-auto min-w-[200px]">
+        <div className="grid grid-cols-1 gap-2 text-nowrap text-xs w-[90%]">
+          <div className="bg-white rounded-lg p-2 justify-start flex items-center gap-2 overflow-x-auto ">
             <FaLink size={20} />
             <h1 className="">{formData.socialLink}</h1>
           </div>
-          <div className="bg-white rounded-lg p-2 justify-start flex items-center gap-5 overflow-x-auto min-w-[200px]">
+          <div className="bg-white rounded-lg p-2 justify-start flex items-center gap-5 overflow-x-auto ">
             {formData.communications === "linkedin" ? (
               <AiFillLinkedin size={20} />
             ) : formData.communications === "phone" ? (
@@ -58,7 +60,7 @@ const Page3 = ({
           Additional Information
         </h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-nowrap">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             <div className="text-nowrap flex flex-col">
               <label className="">Social Media Links</label>
               <input
@@ -70,7 +72,7 @@ const Page3 = ({
                 onChange={handleChange}
               />
             </div>
-            <div className="w-full justify-between flex flex-col">
+            <div className="w-full justify-between flex flex-col text-nowrap ">
               <label className="">Preferred mode of communication</label>
               <select
                 required
@@ -97,7 +99,7 @@ const Page3 = ({
                 onChange={handleChange}
               />
             </div>
-            <div className="">
+            <div className="grid-cols-2">
               <label className="">
                 How do you plan to contribute to the growth of the network
               </label>
@@ -110,7 +112,7 @@ const Page3 = ({
                 className="mt-1 block w-full border text-center outline-none p-2 border-gray-300 rounded-md shadow-sm"
               />
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 ">
               <input
                 required
                 type="checkbox"
@@ -121,7 +123,7 @@ const Page3 = ({
               <label>I agree to all terms & conditions review your form</label>
             </div>
           </div>
-          <div className="flex justify-between gap-4">
+          <div className="flex justify-between gap-4 absolute right-5 bottom-2 md:bottom-5">
             <button
               type="button"
               className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm text-right"

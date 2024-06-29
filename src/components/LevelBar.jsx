@@ -137,8 +137,8 @@ const LevelBar = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center ">
-      <div className="flex justify-center items-center mt-4">
+    <div className="flex flex-col items-center">
+      <div className="flex justify-center items-center mt-2">
         {steps.map((item, index) => (
           <React.Fragment key={index}>
             <div
@@ -164,16 +164,15 @@ const LevelBar = () => {
           </React.Fragment>
         ))}
       </div>
-      <div className="mt-8 w-full ">
-        <div className="flex justify-center p-4  ">
-          
-          <div
-            className={`flex  w-[80vw] xl:w-[60vw] h-[75vh] bg-white overflow-hidden steel-bg  shadow-lg rounded-2xl 1`}>
-            {steps[0].component}
-            {steps[1].component}
-            {steps[2].component}
-          </div>
+      <div className="py-5 flex justify-center w-full ">
+        {/* <div className="flex justify-center p-4  "> */}
+        <div
+          className={`flex  w-[90vw] md:w-[80vw] xl:w-[80vw] h-full md:h-[80vh] bg-white overflow-x-hidden overflow-y-auto  steel-bg  shadow-lg rounded-2xl 1`}>
+          {steps[0].component}
+          {steps[1].component}
+          {steps[2].component}
         </div>
+        {/* </div> */}
       </div>
     </div>
   );

@@ -20,6 +20,20 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent; /* color of the thumb */
+  
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent; /* color of the track */
+}
+
 .steel-bg {
   /* background: linear-gradient(135deg, #bcc6cc, #7a8288); */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -84,9 +98,6 @@ input[type="number"]::-webkit-outer-spin-button {
     opacity: 0;
   }
 }
-
-
-
 
 /* Add this CSS to your styles */
 /* @keyframes fadeInOut {
