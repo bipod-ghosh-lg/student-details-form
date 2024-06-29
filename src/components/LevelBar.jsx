@@ -7,7 +7,7 @@ import Page3 from "./Page3";
 
 const LevelBar = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const [animationClass, setAnimationClass] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -44,10 +44,9 @@ const LevelBar = () => {
     // console.log(e);
     if (e.target?.checked) {
       setFormData({ ...formData, [e.target.name]: e.target.checked });
-    }
-    else if (e?.phone) {
+    } else if (e?.phone) {
       setFormData({ ...formData, phoneNo: e.phone });
-    } else if(e?.target?.name) {
+    } else if (e?.target?.name) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
@@ -67,17 +66,25 @@ const LevelBar = () => {
   });
 
   const handleNext = (e) => {
-    setActiveStep((prevActiveStep) => {
-      console.log(prevActiveStep + 1);
-      return prevActiveStep + 1;
-    });
+    setAnimationClass("slide-out-left");
+    setTimeout(() => {
+      setActiveStep((prevActiveStep) => {
+        console.log(prevActiveStep + 1);
+        return prevActiveStep + 1;
+      });
+      setAnimationClass("slide-in-right");
+    }, 300); // Match the animation duration
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => {
-      console.log(prevActiveStep - 1);
-      return prevActiveStep - 1
-    });
+    setAnimationClass("slide-out-right");
+    setTimeout(() => {
+      setActiveStep((prevActiveStep) => {
+        console.log(prevActiveStep - 1);
+        return prevActiveStep - 1;
+      });
+      setAnimationClass("slide-in-left");
+    }, 300); // Match the animation duration
   };
 
   const handleReset = (e) => {
@@ -95,6 +102,7 @@ const LevelBar = () => {
           formData={formData}
           activeStep={activeStep}
           handleNext={handleNext}
+          animationClass={animationClass}
         />
       ),
     },
@@ -108,6 +116,7 @@ const LevelBar = () => {
           setFormData={setFormData}
           handleBack={handleBack}
           activeStep={activeStep}
+          animationClass={animationClass}
         />
       ),
     },
@@ -121,6 +130,7 @@ const LevelBar = () => {
           setFormData={setFormData}
           handleBack={handleBack}
           activeStep={activeStep}
+          animationClass={animationClass}
         />
       ),
     },
@@ -156,7 +166,9 @@ const LevelBar = () => {
       </div>
       <div className="mt-8 w-full ">
         <div className="flex justify-center p-4  ">
-          <div className="flex  w-[80vw] xl:w-[60vw] h-[75vh] bg-white absolute overflow-hidden   shadow-lg rounded-2xl ">
+          
+          <div
+            className={`flex  w-[80vw] xl:w-[60vw] h-[75vh] bg-white overflow-hidden steel-bg  shadow-lg rounded-2xl 1`}>
             {steps[0].component}
             {steps[1].component}
             {steps[2].component}
