@@ -112,7 +112,7 @@ const Page3 = ({
                 className="mt-1 block w-full border text-center outline-none p-2 border-gray-300 rounded-md shadow-sm"
               />
             </div>
-            <div className="flex items-center gap-4 ">
+            <div className="flex items-center gap-4 col-span-2">
               <input
                 required
                 type="checkbox"

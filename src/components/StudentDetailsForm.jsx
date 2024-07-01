@@ -15,6 +15,7 @@ import { BsGenderNeuter } from "react-icons/bs";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import startsWith from "lodash.startswith";
+import axios  from "axios";
 
 const StudentDetailsForm = ({
   handleChange,
@@ -29,16 +30,32 @@ const StudentDetailsForm = ({
     handleNext();
   };
 
+ 
+
+  var config = {
+    method: "get",
+    url: `https://api.geoapify.com/v1/geocode/search?text=${formData.addressLine1}&apiKey=7d03ba4449404d4cbe3be9bab121795a`,
+    headers: {},
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
   return (
     <div
-      className={`flex flex-col md:flex-row justify-center h-auto w-full text-sm transition-all duration-500 ${
+      className={`flex flex-col md:flex-row justify-center  h-auto w-full text-sm transition-all duration-500 ${
         activeStep === 0 ? "flex" : "hidden"
       } ${animationClass}`}>
       <div
         className={`${
           formData.gender === "Female" ? "bg-pink-300" : "bg-orange-300"
         } rounded-lg md:rounded-r-none w-full md:w-[60%] h-auto flex flex-col gap-2 py-10 px-4 items-center text-gray-700 overflow-auto`}>
-        <div className="h-32 w-32 bg-orange-500 rounded-full p-4">
+        <div className="h-28 w-28 bg-orange-500 rounded-full p-4">
           {formData.gender === "Female" ? (
             <img
               src={femaleImg}
@@ -54,16 +71,16 @@ const StudentDetailsForm = ({
           )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-nowrap text-xs w-full">
-          <div className="bg-white col-span-2 rounded-lg p-2 min-w-[120px] overflow-x-auto">
+          <div className="bg-white col-span-2 lg:col-span-1 rounded-lg p-2 min-w-[120px] overflow-x-auto ">
             <p>
               <span>Name:</span> {formData.firstName} {formData.lastName}
             </p>
           </div>
-          <div className="bg-white col-span-2 min-w-[120px] rounded-lg p-2 flex items-center gap-2">
+          <div className="bg-white col-span-2 lg:col-span-1 min-w-[120px] rounded-lg p-2 flex items-center gap-2">
             <MdPhoneIphone size={20} />
             <p>{formData.phoneNo}</p>
           </div>
-          <div className="bg-white rounded-lg col-span-2 p-2 min-w-[50%] flex items-center gap-2">
+          <div className="bg-white rounded-lg col-span-2  p-2 min-w-[50%] flex items-center gap-2">
             <MdEmail size={20} />
             <p>{formData.email}</p>
           </div>
@@ -101,7 +118,7 @@ const StudentDetailsForm = ({
             <FaFlag size={20} />
             <p>{formData.country}</p>
           </div>
-          <div className="bg-white rounded-lg p-2 min-w-[130px] flex items-center gap-2">
+          <div className="bg-white rounded-lg p-2  flex items-center gap-2">
             <TbMapPinCode size={20} />
             <p>{formData.pincode}</p>
           </div>
@@ -153,6 +170,8 @@ const StudentDetailsForm = ({
                   }}
                   onChange={(phone) => handleChange({ phone })}
                   inputClass="max-w-full"
+                  containerClass=""
+                  
                 />
               </div>
               <div className="mb-4 md:mb-0">
@@ -262,15 +281,15 @@ const StudentDetailsForm = ({
                   className="mt-1 px-2 py-1 block w-full border border-gray-300 rounded-md shadow-sm"
                 />
               </div>
-              <div className="flex justify-end w-full col-span-2 md:absolute bottom-5 right-5">
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm">
-                  Next
-                </button>
-              </div>
             </div>
           </section>
+          <div className="flex justify-end w-full  ">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm">
+              Next
+            </button>
+          </div>
         </form>
       </div>
     </div>
