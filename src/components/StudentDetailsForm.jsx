@@ -34,7 +34,10 @@ const StudentDetailsForm = ({
       className={`flex flex-col md:flex-row justify-center h-auto w-full text-sm transition-all duration-500 ${
         activeStep === 0 ? "flex" : "hidden"
       } ${animationClass}`}>
-      <div className="bg-yellow-400 rounded-lg md:rounded-r-none w-full md:w-[60%] h-auto flex flex-col gap-2 py-10 px-4 items-center text-gray-700 overflow-auto">
+      <div
+        className={`${
+          formData.gender === "Female" ? "bg-pink-300" : "bg-orange-300"
+        } rounded-lg md:rounded-r-none w-full md:w-[60%] h-auto flex flex-col gap-2 py-10 px-4 items-center text-gray-700 overflow-auto`}>
         <div className="h-32 w-32 bg-orange-500 rounded-full p-4">
           {formData.gender === "Female" ? (
             <img
@@ -259,7 +262,7 @@ const StudentDetailsForm = ({
                   className="mt-1 px-2 py-1 block w-full border border-gray-300 rounded-md shadow-sm"
                 />
               </div>
-              <div className="flex justify-end w-full col-span-2 absolute bottom-5 right-5">
+              <div className="flex justify-end w-full col-span-2 md:absolute bottom-5 right-5">
                 <button
                   type="submit"
                   className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm">

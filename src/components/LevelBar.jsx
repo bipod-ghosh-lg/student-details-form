@@ -142,7 +142,7 @@ const LevelBar = () => {
         {steps.map((item, index) => (
           <React.Fragment key={index}>
             <div
-              className={`flex md:pl-20 md:flex-col items-center w-full text-white ${
+              className={`flex mt-5 md:mt-0 md:pl-20 md:flex-col items-center w-full text-white ${
                 index > activeStep ? "text-blue-500" : ""
               }`}>
               <div

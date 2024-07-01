@@ -22,7 +22,7 @@ const Page3 = ({
       className={`flex-col md:flex-row justify-center h-full w-full  overflow-y-auto pb-5 md:pb-0 ${
         activeStep === 2 ? "flex" : "hidden"
       } text-sm ${animationClass} overflow-hidden`}>
-      <div className="bg-yellow-400 rounded-lg md:rounded-r-none w-full md:w-[60%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700">
+      <div className="bg-green-200 rounded-lg md:rounded-r-none w-full md:w-[60%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700">
         <div className="h-40 w-40 bg-orange-500 rounded-full p-4 overflow-hidden">
           {formData.gender === "Female" ? (
             formData.profesion === "student" ? (

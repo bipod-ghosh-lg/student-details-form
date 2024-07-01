@@ -39,7 +39,7 @@ const StudentEducation = ({
       className={`flex fade-in-out-2 flex-col md:flex-row justify-center h-full w-full   text-sm transition-all duration-500 ${
         activeStep === 1 ? "flex" : "hidden"
       } ${animationClass}`}>
-      <div className="bg-yellow-400 rounded-lg md:rounded-r-none w-full md:w-[60%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700 ">
+      <div className={`${formData.profesion === "student" ? "bg-cyan-300" : "bg-blue-400"} rounded-lg md:rounded-r-none w-full md:w-[60%] h-full flex flex-col gap-2 py-10 px-1 items-center text-gray-700` }>
         <div className="h-32 w-32 bg-orange-500 rounded-full p-4 overflow-hidden">
           {formData.gender === "Female" ? (
             formData.profesion === "student" ? (
@@ -61,7 +61,7 @@ const StudentEducation = ({
             <img src={workingMaleImg} alt="" className="" />
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-nowrap text-xs w-full ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-nowrap text-xs w-full px-2 ">
           {formData.profesion === "student" ? (
             <>
               <div className="bg-white rounded-lg p-2 min-w-[120px] overflow-x-auto col-span-2 ">
@@ -85,12 +85,12 @@ const StudentEducation = ({
                 <p className="">{formData.educationCity}</p>
               </div>
 
-              <div className="bg-white rounded-lg p-2 min-w-[120%]  md:min-w-[170px] justify-start flex items-center gap-2">
+              <div className="bg-white col-span-2 rounded-lg p-2   md:min-w-[120px] justify-start flex items-center gap-2">
                 <MdAccountTree size={20} className="" />{" "}
                 <p className="">{formData.course}</p>
               </div>
 
-              <div className="bg-white rounded-lg p-2 min-w-[50%] justify-start flex items-center gap-2">
+              <div className="bg-white rounded-lg p-2 col-span-2 min-w-[120px] justify-start flex items-center gap-2">
                 <FaCalendar size={20} className="" />{" "}
                 <p className="">{formData.passingYear}</p>
               </div>
@@ -136,7 +136,7 @@ const StudentEducation = ({
         </div>
       </div>
 
-      <div className="max-w-4xl h-auto  w-full p-6 bg-white ">
+      <div className="max-w-4xl h-auto  w-full p-6 bg-white pb-16 md:pb-0 ">
         <section className="mb-6 flex flex-col gap-4">
           <h3 className="text-2xl text-center mb-4 font-bold">
             What is your latest update
@@ -299,7 +299,7 @@ const StudentEducation = ({
                 </div>
               </div>
             )}
-            <div className="flex justify-between  gap-4 absolute right-5 bottom-2 md:bottom-5">
+            <div className="flex justify-between  gap-4 absolute right-5 bottom-5 md:bottom-5">
               <button
                 type="button"
                 className="px-6 py-2 bg-lite-blue text-white font-medium rounded-md shadow-sm text-right"
