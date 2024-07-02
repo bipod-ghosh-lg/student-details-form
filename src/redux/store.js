@@ -2,11 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import formReducer from "./slice/formSlice";
 import loginReducer from "./slice/loginSlice";
+import stepSliceReducer from "./slice/alumniStepSlice";
 
 const store = configureStore({
   reducer: {
     form: formReducer,
     login: loginReducer,
+    stepsSlice: stepSliceReducer,
   },
 });
 

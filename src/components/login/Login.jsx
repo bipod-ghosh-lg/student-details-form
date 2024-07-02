@@ -132,7 +132,7 @@ const Login = () => {
             <span className="text-5xl font-bold h-[2px]">“</span>
             <hr className="w-[70%] bg-[#00BDD6] h-[2px]" />
           </div>
-          <div className=" w-full text-[#00BDD6]">
+          <div className=" w-full text-[#00BDD6] z-20 bg-gray-100 p-2  rounded-l-lg">
             <p className=" text-xl md:text-2xl lg:text-3xl font-semibold text-center">
               Join us to <span className=" underline">effectively</span>{" "}
               organize your schedule, manage events and stay on top of you busy
