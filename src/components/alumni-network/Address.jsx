@@ -15,8 +15,14 @@ import { updateFormData } from "../../redux/slice/alumniFormdata";
 
 const Address = forwardRef((props, ref) => {
   const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [isStateOpen, setIsStateOpen] = useState(false);
+  const [countryIso, setCountryIso] = useState("");
+  const [cities, setCities] = useState([]);
+  const [isCitiesOpen, setIsCitiesOpen] = useState(false)
+  const [filteredCities, setFilteredCities] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,7 +42,7 @@ const Address = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-    const { country, state, zip, street, city } = formData;
+    const { country, state, zip, street, citie } = formData;
 
     if (!country) {
       toast.warn("Please fill country fields.");
@@ -58,8 +64,8 @@ const Address = forwardRef((props, ref) => {
       return false;
     }
 
-    if (!city) {
-      toast.warn("Please fill city fields.");
+    if (!citie) {
+      toast.warn("Please fill citie fields.");
       return false;
     }
     toast.success("Level 2 completed");
@@ -72,6 +78,7 @@ const Address = forwardRef((props, ref) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name)
     dispatch(updateFormData({ [name]: value }));
 
     if (name === "country") {
@@ -85,6 +92,17 @@ const Address = forwardRef((props, ref) => {
       }
       setIsCountryOpen(true);
     }
+    if (name === "citie") {
+      if (value) {
+        const filtered = cities.filter((cities) =>
+          cities.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredCities(filtered);
+      } else {
+        setFilteredCountries(cities);
+      }
+      setIsCitiesOpen(true);
+    }
   };
 
   const getCountry = async () => {
@@ -97,9 +115,44 @@ const Address = forwardRef((props, ref) => {
     }
   };
 
-  const handleCountrySelect = (country) => {
+  const getStates = async (countryIso2) => {
+    setCountryIso(countryIso2);
+    try {
+      const response = await instance.get(`/${countryIso2}/states`);
+      setStates(response.data);
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
+  const getcities = async (stateIso2) => {
+    console.log(countryIso, stateIso2)
+    try {
+      const response = await instance.get(
+        `/${countryIso}/states/${stateIso2}/cities`
+      );
+      setCities(response.data);
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
+  const handleCountrySelect = (country, iso2) => {
     dispatch(updateFormData({ country }));
     setIsCountryOpen(false);
+    getStates(iso2); // Fetch states based on selected country's ISO2 code
+  };
+
+  const handleStateSelect = (state, iso2) => {
+    // console.log(iso2)
+    dispatch(updateFormData({ state }));
+    setIsStateOpen(false);
+    getcities(iso2)
+  };
+
+  const handlecitieSelect = (citie) => {
+    dispatch(updateFormData({ citie }));
+    setIsCitiesOpen(false);
   };
 
   useEffect(() => {
@@ -111,12 +164,18 @@ const Address = forwardRef((props, ref) => {
       if (isCountryOpen && !e.target.closest("#country-dropdown")) {
         setIsCountryOpen(false);
       }
+      if (isStateOpen && !e.target.closest("#state-dropdown")) {
+        setIsStateOpen(false);
+      }
+      if (isCitiesOpen && !e.target.closest("#citie-dropdown")) {
+        setIsCitiesOpen(false);
+      }
     };
     document.addEventListener("click", closeDropdown);
     return () => {
       document.removeEventListener("click", closeDropdown);
     };
-  }, [isCountryOpen]);
+  }, [isCountryOpen, isStateOpen]);
 
   return (
     <div
@@ -148,7 +207,7 @@ const Address = forwardRef((props, ref) => {
             value={formData.country}
             onChange={handleChange}
             className="w-full p-2 rounded-lg"
-            autoComplete="off" 
+            autoComplete="off" // Disable browser auto suggestion
             onClick={() => setIsCountryOpen(true)}
           />
           {isCountryOpen && (
@@ -157,14 +216,14 @@ const Address = forwardRef((props, ref) => {
                 <div
                   key={item.id}
                   className="p-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleCountrySelect(item.name)}>
+                  onClick={() => handleCountrySelect(item.name, item.iso2)}>
                   {item.name}
                 </div>
               ))}
             </div>
           )}
         </div>
-        <div className="mb-4 relative">
+        <div className="mb-4 relative" id="state-dropdown">
           <label htmlFor="state" className="block text-gray-700 font-bold mb-2">
             State/Province
           </label>
@@ -176,7 +235,20 @@ const Address = forwardRef((props, ref) => {
             onChange={handleChange}
             className="w-full p-2 rounded-lg"
             autoComplete="off" // Disable browser auto suggestion
+            onClick={() => setIsStateOpen(true)}
           />
+          {isStateOpen && (
+            <div className="absolute z-10 max-h-40 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+              {states.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handleStateSelect(item.name, item.iso2)}>
+                  {item.name}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="zip" className="block text-gray-700 font-bold mb-2">
@@ -208,19 +280,32 @@ const Address = forwardRef((props, ref) => {
             autoComplete="off" // Disable browser auto suggestion
           />
         </div>
-        <div className="mb-4 col-span-2">
-          <label htmlFor="city" className="block text-gray-700 font-bold mb-2">
-            City
+        <div className="mb-4 col-span-2 relative">
+          <label htmlFor="citie" className="block text-gray-700 font-bold mb-2">
+            citie
           </label>
           <input
             type="text"
-            id="city"
-            name="city"
-            value={formData.city}
+            id="citie"
+            name="citie"
+            value={formData.citie}
             onChange={handleChange}
             className="w-full  p-2 rounded-lg"
             autoComplete="off" // Disable browser auto suggestion
+            onClick={() => setIsCitiesOpen(true)}
           />
+          {isCitiesOpen && filteredCities && (
+            <div className="absolute z-10 max-h-32 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+              {filteredCities.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handlecitieSelect(item.name)}>
+                  {item.name}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="mb-4 col-span-2">
           <label
