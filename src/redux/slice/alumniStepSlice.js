@@ -1,33 +1,29 @@
-// src/redux/stepsSlice.js
+// alumniStepSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
-const stepsSlice = createSlice({
-  name: "steps",
-  initialState: {
-    currentStep: 1,
-    completedSteps: [],
-  },
-  reducers: {
-    getCurrentStep: (state) => state.currentStep,
+const initialState = {
+  currentStep: 1,
+  navigationDirection: "next", // Add this state
+};
 
+const stepSlice = createSlice({
+  name: "stepsSlice",
+  initialState,
+  reducers: {
     nextStep: (state) => {
       state.currentStep += 1;
-      if (!state.completedSteps.includes(state.currentStep)) {
-        state.completedSteps.push(state.currentStep);
-      }
+      state.navigationDirection = "next";
     },
     prevStep: (state) => {
-      if (state.currentStep > 1) {
-        state.currentStep -= 1;
-      }
+      state.currentStep -= 1;
+      state.navigationDirection = "prev";
     },
-
     setStep: (state, action) => {
       state.currentStep = action.payload;
     },
   },
 });
 
-export const { getCurrentStep, nextStep, prevStep, setStep } =
-  stepsSlice.actions;
-export default stepsSlice.reducer;
+export const { nextStep, prevStep, setStep } = stepSlice.actions;
+
+export default stepSlice.reducer;

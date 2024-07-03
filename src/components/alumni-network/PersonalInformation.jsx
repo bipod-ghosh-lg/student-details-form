@@ -1,54 +1,92 @@
 // src/components/PersonalInformation.jsx
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getCurrentStep, nextStep } from "../../redux/slice/alumniStepSlice";
-import { IoPerson } from "react-icons/io5";
 
-const PersonalInformation = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    whatsapp: "",
-    dob: "",
-    gender: "Male", // Default gender
-  });
+import { IoPerson } from "react-icons/io5";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { updateFormData } from "../../redux/slice/alumniFormdata";
+
+const PersonalInformation = forwardRef((props, ref) => {
+  // const [formData, setFormData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  //   whatsapp: "",
+  //   dob: "",
+  //   gender: "Male", // Default gender
+  // });
   const [sameAsPhone, setSameAsPhone] = useState(true);
+  const dispatch = useDispatch();
 
   const { currentStep } = useSelector((state) => state.stepsSlice);
+  const formData = useSelector((state) => state.formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    dispatch(updateFormData({ [name]: value }));
 
     if (name === "phone" && sameAsPhone) {
-      setFormData({
-        ...formData,
-        phone: value,
-        whatsapp: value,
-      });
+      dispatch(updateFormData({ phone: value, whatsapp: value }));
     }
   };
 
   const handleCheckboxChange = () => {
     setSameAsPhone(!sameAsPhone);
     if (!sameAsPhone) {
-      setFormData({
-        ...formData,
-        whatsapp: formData.phone,
-      });
+      dispatch(updateFormData({ whatsapp: formData.phone }));
     }
   };
+
+  const validateForm = () => {
+    console.log(formData)
+    const { firstName, lastName, email, phone, whatsapp, dob, gender } =
+      formData;
+
+    if (!firstName) {
+      toast.warn("Please fill in the First Name.");
+      return false;
+    }
+    if (!lastName) {
+      toast.warn("Please fill in the Last Name.");
+      return false;
+    }
+    if (!email) {
+      toast.warn("Please fill in the Email Address.");
+      return false;
+    }
+    if (!phone) {
+      toast.warn("Please fill in the Phone Number.");
+      return false;
+    }
+    if (!whatsapp) {
+      toast.warn("Please fill in the WhatsApp Number.");
+      return false;
+    }
+    if (!dob) {
+      toast.warn("Please fill in the Date of Birth.");
+      return false;
+    }
+    if (!gender) {
+      toast.warn("Please select a Gender.");
+      return false;
+    }
+    toast.success("level 1");
+    return true;
+  };
+
+  useImperativeHandle(ref, () => ({
+    validateForm,
+  }));
 
   return (
     <div
       className={`${
-        currentStep === 1 ? "flex flex-col justify-center items-center slide-in-left" : "hidden slide-out-right"
+        currentStep === 1
+          ? "flex flex-col justify-center items-center slide-in-left"
+          : "hidden slide-out-right"
       } p-5 2xl:py-10 px-7 w-full h-full`}>
       <div className="flex gap-2 mb-4 items-center">
         <IoPerson className="text-2xl text-[#00BDD6]" />
@@ -60,6 +98,7 @@ const PersonalInformation = () => {
           <label className="block text-gray-700">First Name</label>
           <input
             type="text"
+            id="firstName"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
@@ -70,6 +109,7 @@ const PersonalInformation = () => {
           <label className="block text-gray-700">Last Name</label>
           <input
             type="text"
+            id="lastName"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
@@ -80,6 +120,7 @@ const PersonalInformation = () => {
           <label className="block text-gray-700">Email Address</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -89,7 +130,8 @@ const PersonalInformation = () => {
         <div className="h-fit col-span-2">
           <label className="block text-gray-700">Phone Number</label>
           <input
-            type="tel"
+            type="number"
+            id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
@@ -101,6 +143,7 @@ const PersonalInformation = () => {
           <input
             type="tel"
             name="whatsapp"
+            id="whatsapp"
             value={sameAsPhone ? formData.phone : formData.whatsapp}
             onChange={handleChange}
             disabled={sameAsPhone}
@@ -120,6 +163,7 @@ const PersonalInformation = () => {
           <label className="block text-gray-700">Date of Birth</label>
           <input
             type="date"
+            id="dob"
             name="dob"
             value={formData.dob}
             onChange={handleChange}
@@ -130,6 +174,7 @@ const PersonalInformation = () => {
           <label className=" text-gray-700">Gender</label>
           <select
             name="gender"
+            id="gender"
             value={formData.gender}
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm p-1">
@@ -141,6 +186,6 @@ const PersonalInformation = () => {
       </form>
     </div>
   );
-};
+});
 
 export default PersonalInformation;

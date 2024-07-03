@@ -5,7 +5,7 @@ import { setStep } from "../../redux/slice/alumniStepSlice";
 import { IoExitOutline } from "react-icons/io5";
 const SideNavbar = () => {
   const { currentStep, completedSteps } = useSelector((state) => {
-    console.log(state);
+    // console.log(state);
     return state.stepsSlice;
   });
   const dispatch = useDispatch();
