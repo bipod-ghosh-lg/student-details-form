@@ -14,11 +14,12 @@ const initialState = {
   zipcode: "",
   streetAddress: "",
   landmark: "",
-  organization: "",
-  role: "",
-  socialLink: "",
-  expectations: "",
-  communications: "",
+    shippingCountry: "",
+    shippingState: "",
+    shippingCitie: "",
+    shippingZipcode: "",
+    shippingStreetAddress: "",
+    shippingLandmark: "",
   checkbox: false,
 };
 

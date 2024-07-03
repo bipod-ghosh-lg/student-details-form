@@ -6,6 +6,7 @@ import PersonalInformation from "./PersonalInformation";
 import Address from "./Address";
 import whatsappImg from "../../assets/images/whatsapp.png";
 import { ToastContainer } from "react-toastify";
+import Shipping from "./Shipping";
 
 const AnimatedOutlet = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const AnimatedOutlet = () => {
       <div className="h-[75%] 2xl:h-[80%] w-[90vw] md:w-[80%] 2xl:w-[45vw] bg-white border rounded-lg shadow-lg flex justify-center items-center overflow-hidden">
         <PersonalInformation ref={personalRef} />
         <Address ref={addressRef} />
+        <Shipping />
       </div>
       <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
         <button

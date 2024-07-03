@@ -141,7 +141,7 @@ const PersonalInformation = forwardRef((props, ref) => {
         <div className="h-fit col-span-2 ">
           <label className="block text-gray-700">WhatsApp Number</label>
           <input
-            type="tel"
+            type="number"
             name="whatsapp"
             id="whatsapp"
             value={sameAsPhone ? formData.phone : formData.whatsapp}
