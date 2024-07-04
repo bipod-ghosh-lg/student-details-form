@@ -14,12 +14,20 @@ const initialState = {
   zipcode: "",
   streetAddress: "",
   landmark: "",
-    shippingCountry: "",
-    shippingState: "",
-    shippingCitie: "",
-    shippingZipcode: "",
-    shippingStreetAddress: "",
-    shippingLandmark: "",
+  shippingCountry: "",
+  shippingState: "",
+  shippingCitie: "",
+  shippingZipcode: "",
+  shippingStreetAddress: "",
+  shippingLandmark: "",
+  companyName: "",
+  companyGstNumber: "",
+  companyAddress: "",
+  companyCountry: "",
+  companyState: "",
+  companyCitie: "",
+  companyZipcode: "",
+  currentRole: "",
   checkbox: false,
 };
 
@@ -27,8 +35,8 @@ const formDataSlice = createSlice({
   name: "formData",
   initialState,
   reducers: {
-      updateFormData(state, action) {
-          console.log(action.payload);
+    updateFormData(state, action) {
+      console.log(action.payload);
       // Action payload should contain updated form data
       return {
         ...state,

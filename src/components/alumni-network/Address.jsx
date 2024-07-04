@@ -11,6 +11,7 @@ import { FaRegAddressCard } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
 import { instance } from "../../redux/api";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
+import addressImg from "../../assets/images/location.png";
 // import "react-toastify/dist/ReactToastify.css";
 
 const Address = forwardRef((props, ref) => {
@@ -188,7 +189,7 @@ const Address = forwardRef((props, ref) => {
       } p-5 2xl:py-10 px-7 `}>
       {/* <ToastContainer closeOnClick /> */}
       <div className="flex gap-4 justify-center items-center text-slate-500">
-        <FaRegAddressCard size={30} />
+        <img src={addressImg} alt="addressImg" className="w-8 h-8" />
         <h2 className="text-2xl font-bold ">Address</h2>
       </div>
 
@@ -233,6 +234,7 @@ const Address = forwardRef((props, ref) => {
             name="state"
             value={formData.state}
             onChange={handleChange}
+            readOnly
             className="w-full p-2 rounded-lg"
             autoComplete="off" // Disable browser auto suggestion
             onClick={() => setIsStateOpen(true)}
@@ -295,7 +297,7 @@ const Address = forwardRef((props, ref) => {
             onClick={() => setIsCitiesOpen(true)}
           />
           {isCitiesOpen && filteredCities && (
-            <div className="absolute z-10 max-h-32 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96  overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {filteredCities.map((item) => (
                 <div
                   key={item.id}

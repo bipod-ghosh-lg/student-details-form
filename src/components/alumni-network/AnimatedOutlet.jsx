@@ -7,6 +7,7 @@ import Address from "./Address";
 import whatsappImg from "../../assets/images/whatsapp.png";
 import { ToastContainer } from "react-toastify";
 import Shipping from "./Shipping";
+import CompanyDetails from "./CompanyDetails";
 
 const AnimatedOutlet = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const AnimatedOutlet = () => {
   console.log(location);
   const addressRef = useRef();
   const personalRef = useRef();
+  const shippingRef = useRef();
+  const companyRef = useRef();
   const { currentStep } = useSelector((state) => state.stepsSlice);
 
   const handleNext = () => {
@@ -24,7 +27,14 @@ const AnimatedOutlet = () => {
     }
     if (currentStep === 2 && addressRef.current && addressRef.current.validateForm()) {
       dispatch(nextStep());
-    } 
+    }
+
+    if (currentStep === 3 && shippingRef.current && shippingRef.current.validateForm()) {
+      dispatch(nextStep());
+    }else {
+      dispatch(nextStep());
+    }
+    
   };
 
   const handlePrev = () => {
@@ -39,7 +49,8 @@ const AnimatedOutlet = () => {
       <div className="h-[75%] 2xl:h-[80%] w-[90vw] md:w-[80%] 2xl:w-[45vw] bg-white border rounded-lg shadow-lg flex justify-center items-center overflow-hidden">
         <PersonalInformation ref={personalRef} />
         <Address ref={addressRef} />
-        <Shipping />
+        <Shipping ref={shippingRef} />
+        <CompanyDetails/>
       </div>
       <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
         <button
@@ -48,7 +59,7 @@ const AnimatedOutlet = () => {
           className={`p-2 rounded bg-[#00BDD6] ${
             currentStep <= 1 ? "hidden" : "w-[40%]"
           } col-span-2`}>
-          cancel
+          Back
         </button>
         <button
           type="submit"

@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { updateFormData } from "../../redux/slice/alumniFormdata";
+import shippingImg from "../../assets/images/store.png";
+import { toast } from "react-toastify";
 
-const Shipping = () => {
+const Shipping = forwardRef((props, ref) => {
   const [sameAsAddress, setSameAsAddress] = useState(false); // Default to false initially
   const formData = useSelector((state) => state.formData); // Access formData from Redux
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
@@ -13,7 +17,45 @@ const Shipping = () => {
 
   const handleCheckboxChange = () => {
     setSameAsAddress((prev) => !prev); // Toggle sameAsAddress state
-    };
+  };
+  
+  const validateForm = () => {
+    const { shippingCountry, shippingState, shippingZipcode, shippingStreetAddress, shippingCitie } = formData;
+
+    if (!sameAsAddress) {
+
+      if (!shippingCountry) {
+        toast.warn("Please fill country fields.");
+        return false;
+      }
+
+      if (!shippingState) {
+        toast.warn("Please fill state fields.");
+        return false;
+      }
+
+      if (!shippingZipcode) {
+        toast.warn("Please fill zip fields.");
+        return false;
+      }
+
+      if (!shippingStreetAddress) {
+        toast.warn("Please fill street fields.");
+        return false;
+      }
+
+      if (!shippingCitie) {
+        toast.warn("Please fill citie fields.");
+        return false;
+      }
+    }
+    toast.success("Level 3 completed");
+    return true;
+  };
+
+  useImperativeHandle(ref, () => ({
+    validateForm,
+  }));
     
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -29,7 +71,10 @@ const Shipping = () => {
             : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
           : "hidden"
       } p-5 2xl:py-10 px-7 `}>
-      <h2 className="text-2xl font-bold ">Shipping</h2>
+      <div className="flex gap-4 justify-center items-center text-slate-500">
+        <img src={shippingImg} alt="shippingImg" className="w-8 h-8" />
+        <h2 className="text-2xl font-bold ">Shipping</h2>
+      </div>
       <div className="h-fit col-span-2 ">
         <div className="h-fit mt-2 flex items-center">
           <input
@@ -150,6 +195,6 @@ const Shipping = () => {
       </form>
     </div>
   );
-};
+});
 
 export default Shipping;
