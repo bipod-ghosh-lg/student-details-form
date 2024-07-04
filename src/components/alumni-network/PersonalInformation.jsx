@@ -41,7 +41,7 @@ const PersonalInformation = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-    console.log(formData)
+    // console.log(formData)
     const { firstName, lastName, email, phone, whatsapp, dob, gender } =
       formData;
 

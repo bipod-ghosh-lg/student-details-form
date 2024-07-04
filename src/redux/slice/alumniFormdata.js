@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  stepLength: 0,
   firstName: "",
   lastName: "",
   email: "",
@@ -28,6 +29,19 @@ const initialState = {
   companyCitie: "",
   companyZipcode: "",
   currentRole: "",
+  institution: "",
+  degree: "",
+  fieldOfStudy: "",
+  graduationYear: "",
+  educationCountry: "",
+  educationState: "",
+  educationCitie: "",
+  workingCompany: "",
+  workingCountry: "",
+  workingState: "",
+  workingCitie: "",
+  workingIndustry: "",
+  workingRole: "",
   checkbox: false,
 };
 
@@ -36,7 +50,7 @@ const formDataSlice = createSlice({
   initialState,
   reducers: {
     updateFormData(state, action) {
-      console.log(action.payload);
+      // console.log(action.payload);
       // Action payload should contain updated form data
       return {
         ...state,

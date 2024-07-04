@@ -74,16 +74,15 @@ const Shipping = forwardRef((props, ref) => {
       <div className="flex gap-4 justify-center items-center text-slate-500">
         <img src={shippingImg} alt="shippingImg" className="w-8 h-8" />
         <h2 className="text-2xl font-bold ">Shipping</h2>
-      </div>
-      <div className="h-fit col-span-2 ">
-        <div className="h-fit mt-2 flex items-center">
+
+        <div className="h-fit flex items-center gap-2 text-xl font-semibold">
           <input
             type="checkbox"
             checked={sameAsAddress}
             onChange={handleCheckboxChange}
             className="h-4 w-4 checked:border-white accent-[#00BDD6]"
           />
-          <label className="ml-2 text-gray-700">Same as Address</label>
+          <label className=" text-gray-700">Same as Address</label>
         </div>
       </div>
 
@@ -123,14 +122,16 @@ const Shipping = forwardRef((props, ref) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="zip" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="zipcode"
+            className="block text-gray-700 font-bold mb-2">
             Zip/Postal Code
           </label>
           <input
             type="text"
-            id="zip"
-            name={sameAsAddress ? "zip" : "shippingZipcode"}
-            value={sameAsAddress ? formData.zip : formData.shippingZipcode}
+            id="zipcode"
+            name={sameAsAddress ? "zipcode" : "shippingZipcode"}
+            value={sameAsAddress ? formData.zipcode : formData.shippingZipcode}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
               sameAsAddress ? "bg-gray-200" : ""
@@ -163,7 +164,7 @@ const Shipping = forwardRef((props, ref) => {
           <input
             type="text"
             id="city"
-            name={sameAsAddress ? "city" : "shippingCity"}
+            name={sameAsAddress ? "citie" : "shippingCity"}
             value={sameAsAddress ? formData.citie : formData.shippingCitie}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${

@@ -43,7 +43,7 @@ const Address = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-    const { country, state, zip, street, citie } = formData;
+    const { country, state, zipcode, street, citie } = formData;
 
     if (!country) {
       toast.warn("Please fill country fields.");
@@ -55,7 +55,7 @@ const Address = forwardRef((props, ref) => {
       return false;
     }
 
-    if (!zip) {
+    if (!zipcode) {
       toast.warn("Please fill zip fields.");
       return false;
     }
@@ -258,9 +258,9 @@ const Address = forwardRef((props, ref) => {
           </label>
           <input
             type="number"
-            id="zip"
-            name="zip"
-            value={formData.zip}
+            id="zipcode"
+            name="zipcode"
+            value={formData.zipcode}
             onChange={handleChange}
             className="w-full  p-2 rounded-lg"
             autoComplete="off" // Disable browser auto suggestion

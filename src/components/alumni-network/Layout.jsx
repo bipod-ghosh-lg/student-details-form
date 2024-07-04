@@ -12,16 +12,17 @@ const Layout = () => {
       <div className="h-[10%] w-full">
         <Header />
       </div>
-      <div className="flex h-[90vh] w-full justify-center items-center">
-        <div className={`${isMobile ? "hidden" : "block"} h-full w-[25%] 2xl:w-[20%]`}>
+      <div className="flex h-[90vh] flex-col md:flex-row w-full justify-center md:items-center">
+        <div className={` h-[10%] md:h-full w-full md:w-[20%]`}>
           <SideNavbar />
         </div>
-        
-          <AnimatedOutlet />
-        
+
+        <AnimatedOutlet />
       </div>
     </div>
   );
 };
 
 export default Layout;
+
+// ${isMobile ? "hidden" : "block"}
