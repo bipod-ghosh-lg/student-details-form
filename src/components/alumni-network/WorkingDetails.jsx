@@ -1,74 +1,80 @@
-import React, { forwardRef, useImperativeHandle } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { updateFormData } from '../../redux/slice/alumniFormdata';
-import WorkImg from '../../assets/images/business.png';
+import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData } from "../../redux/slice/alumniFormdata";
+import WorkImg from "../../assets/images/business.png";
 
-const WorkingDetails =forwardRef((props, ref) => {
-    const formData = useSelector((state) => state.formData); // Access formData from Redux
-    const dispatch = useDispatch();
+const WorkingDetails = forwardRef((props, ref) => {
+  const formData = useSelector((state) => state.formData); // Access formData from Redux
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
 
-    const { currentStep, navigationDirection } = useSelector(
-      (state) => state.stepsSlice
-    );
+  const { currentStep, navigationDirection } = useSelector(
+    (state) => state.stepsSlice
+  );
 
-    const industries = [
-      "Technology",
-      "Finance",
-      "Healthcare",
-      "Education",
-      "Retail",
-      "Manufacturing",
-      "Hospitality",
-      "Real Estate",
-      "Transportation",
-      "Energy",
-    ];
-    const validateForm = () => {
-      const { workingCompany, workingIndustry, workingRole, workingCountry, workingState, workingCitie } = formData;
+  const industries = [
+    "Technology",
+    "Finance",
+    "Healthcare",
+    "Education",
+    "Retail",
+    "Manufacturing",
+    "Hospitality",
+    "Real Estate",
+    "Transportation",
+    "Energy",
+  ];
 
-      if (!workingCompany) {
-        toast.warn("Please fill company name.");
-        return false;
-      }
+  const validateForm = () => {
+    const {
+      workingCompany,
+      workingIndustry,
+      workingRole,
+      workingCountry,
+      workingState,
+      workingCitie,
+    } = formData;
+    const newErrors = {};
 
-      if (!workingIndustry) {
-        toast.warn("Please select industry.");
-        return false;
-      }
+    if (!workingCompany) {
+      newErrors.workingCompany = "Please fill company name.";
+    }
 
-      if (!workingRole) {
-        toast.warn("Please fill your role.");
-        return false;
-      }
+    if (!workingIndustry) {
+      newErrors.workingIndustry = "Please select industry.";
+    }
 
-      if (!workingCountry) {
-        toast.warn("Please select country.");
-        return false;
-      }
+    if (!workingRole) {
+      newErrors.workingRole = "Please fill your role.";
+    }
 
-      if (!workingState) {
-        toast.warn("Please select state.");
-        return false;
-      }
+    if (!workingCountry) {
+      newErrors.workingCountry = "Please select country.";
+    }
 
-      if (!workingCitie) {
-        toast.warn("Please select citie.");
-        return false;
-      }
+    if (!workingState) {
+      newErrors.workingState = "Please select state.";
+    }
 
-      toast.success("Form submitted successfully.");
-      return true;
-    };
+    if (!workingCitie) {
+      newErrors.workingCitie = "Please select city.";
+    }
 
-    useImperativeHandle(ref, () => ({
-      validateForm,
-    }));
+    setErrors(newErrors);
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      dispatch(updateFormData({ [name]: value }));
-    };
+    return Object.keys(newErrors).length === 0;
+  };
+
+  useImperativeHandle(ref, () => ({
+    validateForm,
+  }));
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateFormData({ [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
   return (
     <div
       className={`${
@@ -93,9 +99,14 @@ const WorkingDetails =forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
           />
+          {errors.workingCompany && (
+            <p className="text-red-500 text-xs italic">
+              {errors.workingCompany}
+            </p>
+          )}
         </div>
         <div className="h-fit flex flex-col gap-2">
-          <label className="block text-gray-70 " htmlFor="industry">
+          <label className="block text-gray-700" htmlFor="industry">
             Industry
           </label>
           <select
@@ -113,6 +124,11 @@ const WorkingDetails =forwardRef((props, ref) => {
               </option>
             ))}
           </select>
+          {errors.workingIndustry && (
+            <p className="text-red-500 text-xs italic">
+              {errors.workingIndustry}
+            </p>
+          )}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">What is your Role</label>
@@ -124,18 +140,10 @@ const WorkingDetails =forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
           />
+          {errors.workingRole && (
+            <p className="text-red-500 text-xs italic">{errors.workingRole}</p>
+          )}
         </div>
-        {/* <div className="h-fit col-span-2 flex flex-col gap-2">
-          <label className="block text-gray-700">Company Address</label>
-          <input
-            type="text"
-            id="companyAddress"
-            name="companyAddress"
-            value={formData.companyAddress}
-            onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-          />
-        </div> */}
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">Country</label>
           <input
@@ -146,6 +154,11 @@ const WorkingDetails =forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
           />
+          {errors.workingCountry && (
+            <p className="text-red-500 text-xs italic">
+              {errors.workingCountry}
+            </p>
+          )}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">State</label>
@@ -157,9 +170,12 @@ const WorkingDetails =forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
           />
+          {errors.workingState && (
+            <p className="text-red-500 text-xs italic">{errors.workingState}</p>
+          )}
         </div>
         <div className="h-fit flex flex-col gap-2">
-          <label className="block text-gray-700">Citie</label>
+          <label className="block text-gray-700">City</label>
           <input
             type="text"
             id="workingCitie"
@@ -168,10 +184,13 @@ const WorkingDetails =forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
           />
+          {errors.workingCitie && (
+            <p className="text-red-500 text-xs italic">{errors.workingCitie}</p>
+          )}
         </div>
       </div>
     </div>
   );
-})
+});
 
-export default WorkingDetails
+export default WorkingDetails;

@@ -1,26 +1,25 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import titleImg from "../../assets/images/title.png";
-import { toast } from "react-toastify";
 
 const CurrentRole = forwardRef((props, ref) => {
   const formData = useSelector((state) => state.formData); // Access formData from Redux
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
 
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
   );
+
   const validateForm = () => {
     const { currentRole } = formData;
 
     if (!currentRole) {
-      toast.warn("Please fill your role.");
+      setErrors({ currentRole: "Current role is required" });
       return false;
     }
 
-    toast.success("Level 5 completed");
     return true;
   };
 
@@ -31,7 +30,14 @@ const CurrentRole = forwardRef((props, ref) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     dispatch(updateFormData({ [name]: value }));
+
+    // Clear error message when user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
   };
+
   return (
     <div
       className={`${
@@ -61,6 +67,9 @@ const CurrentRole = forwardRef((props, ref) => {
           <option value="student">Student</option>
           <option value="employer">Employer</option>
         </select>
+        {errors.currentRole && (
+          <p className="text-red-500 text-xs italic">{errors.currentRole}</p>
+        )}
       </div>
     </div>
   );

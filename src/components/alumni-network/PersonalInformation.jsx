@@ -1,24 +1,13 @@
-// src/components/PersonalInformation.jsx
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
 import { IoPerson } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 
 const PersonalInformation = forwardRef((props, ref) => {
-  // const [formData, setFormData] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   phone: "",
-  //   whatsapp: "",
-  //   dob: "",
-  //   gender: "Male", // Default gender
-  // });
   const [sameAsPhone, setSameAsPhone] = useState(true);
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
 
   const { currentStep } = useSelector((state) => state.stepsSlice);
@@ -29,8 +18,10 @@ const PersonalInformation = forwardRef((props, ref) => {
     dispatch(updateFormData({ [name]: value }));
 
     if (name === "phone" && sameAsPhone) {
-      dispatch(updateFormData({ phone: value, whatsapp: value }));
+      dispatch(updateFormData({ whatsapp: value }));
     }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleCheckboxChange = () => {
@@ -41,47 +32,58 @@ const PersonalInformation = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-    // console.log(formData)
     const { firstName, lastName, email, phone, whatsapp, dob, gender } =
       formData;
+    const newErrors = {};
 
     if (!firstName) {
-      toast.warn("Please fill in the First Name.");
-      return false;
+      newErrors.firstName = "Please fill in the First Name.";
+      setErrors(newErrors);
+      return false
     }
     if (!lastName) {
-      toast.warn("Please fill in the Last Name.");
+      newErrors.lastName = "Please fill in the Last Name.";
+      setErrors(newErrors);
       return false;
     }
-    if (!email) {
-      toast.warn("Please fill in the Email Address.");
-      return false;
-    }
+    
+     if (!email) {
+       newErrors.email = "Please fill in the Email Address.";
+       setErrors(newErrors);
+       return false;
+     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+       newErrors.email = "Please enter a valid email address.";
+       setErrors(newErrors);
+       return false;
+     }
     if (!phone) {
-      toast.warn("Please fill in the Phone Number.");
+      newErrors.phone = "Please fill in the Phone Number.";
+      setErrors(newErrors);
       return false;
     }
     if (!whatsapp) {
-      toast.warn("Please fill in the WhatsApp Number.");
+      newErrors.whatsapp = "Please fill in the WhatsApp Number.";
+      setErrors(newErrors);
       return false;
     }
     if (!dob) {
-      toast.warn("Please fill in the Date of Birth.");
+      newErrors.dob = "Please fill in the Date of Birth.";
+      setErrors(newErrors);
       return false;
     }
     if (!gender) {
-      toast.warn("Please select a Gender.");
+      newErrors.gender = "Please select a Gender.";
+      setErrors(newErrors);
       return false;
     }
-    toast.success("level 1");
-    return true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
-
-  
 
   return (
     <div
@@ -106,6 +108,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.firstName && (
+            <p className="text-red-500 text-xs italic">{errors.firstName}</p>
+          )}
         </div>
         <div className="h-fit">
           <label className="block text-gray-700">Last Name</label>
@@ -117,6 +122,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.lastName && (
+            <p className="text-red-500 text-xs italic">{errors.lastName}</p>
+          )}
         </div>
         <div className="h-fit col-span-2">
           <label className="block text-gray-700">Email Address</label>
@@ -128,6 +136,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.email && (
+            <p className="text-red-500 text-xs italic">{errors.email}</p>
+          )}
         </div>
         <div className="h-fit col-span-2">
           <label className="block text-gray-700">Phone Number</label>
@@ -139,8 +150,11 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.phone && (
+            <p className="text-red-500 text-xs italic">{errors.phone}</p>
+          )}
         </div>
-        <div className="h-fit col-span-2 ">
+        <div className="h-fit col-span-2">
           <label className="block text-gray-700">WhatsApp Number</label>
           <input
             type="number"
@@ -151,6 +165,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             disabled={sameAsPhone}
             className="block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.whatsapp && (
+            <p className="text-red-500 text-xs italic">{errors.whatsapp}</p>
+          )}
           <div className="h-fit mt-2 flex items-center">
             <input
               type="checkbox"
@@ -171,6 +188,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
           />
+          {errors.dob && (
+            <p className="text-red-500 text-xs italic">{errors.dob}</p>
+          )}
         </div>
         <div className="h-fit mb-4">
           <label className=" text-gray-700">Gender</label>
@@ -184,6 +204,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          {errors.gender && (
+            <p className="text-red-500 text-xs italic">{errors.gender}</p>
+          )}
         </div>
       </form>
     </div>

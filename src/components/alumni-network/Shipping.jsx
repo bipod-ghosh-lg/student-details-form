@@ -1,12 +1,12 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import shippingImg from "../../assets/images/store.png";
-import { toast } from "react-toastify";
 
 const Shipping = forwardRef((props, ref) => {
   const [sameAsAddress, setSameAsAddress] = useState(false); // Default to false initially
+  const [errors, setErrors] = useState({});
   const formData = useSelector((state) => state.formData); // Access formData from Redux
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,58 +17,85 @@ const Shipping = forwardRef((props, ref) => {
 
   const handleCheckboxChange = () => {
     setSameAsAddress((prev) => !prev); // Toggle sameAsAddress state
+    setErrors({});
   };
-  
+
   const validateForm = () => {
-    const { shippingCountry, shippingState, shippingZipcode, shippingStreetAddress, shippingCitie } = formData;
+    const newErrors = {};
+    const {
+      shippingCountry,
+      shippingState,
+      shippingZipcode,
+      shippingStreetAddress,
+      shippingCitie,
+    } = formData;
 
     if (!sameAsAddress) {
-
       if (!shippingCountry) {
-        toast.warn("Please fill country fields.");
+        newErrors.shippingCountry = "Please fill country fields.";
+        setErrors(newErrors);
         return false;
       }
 
       if (!shippingState) {
-        toast.warn("Please fill state fields.");
+        newErrors.shippingState = "Please fill state fields.";
+        setErrors(newErrors);
         return false;
       }
 
       if (!shippingZipcode) {
-        toast.warn("Please fill zip fields.");
+        newErrors.shippingZipcode = "Please fill zip fields.";
+        setErrors(newErrors);
         return false;
       }
 
       if (!shippingStreetAddress) {
-        toast.warn("Please fill street fields.");
+        newErrors.shippingStreetAddress = "Please fill street fields.";
+        setErrors(newErrors);
         return false;
       }
 
       if (!shippingCitie) {
-        toast.warn("Please fill citie fields.");
+        newErrors.shippingCitie = "Please fill city fields.";
+        setErrors(newErrors);
         return false;
       }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    } else {
+      setErrors({});
+      return true;
     }
-    toast.success("Level 3 completed");
-    return true;
+
+    
   };
+  // useEffect(() => {
+  //   validateForm();
+  // }, [ sameAsAddress]);
+  
 
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
-    
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      dispatch(updateFormData({ [name]: value }));
-    };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateFormData({ [name]: value }));
+
+    // Clear error message when user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
+  };
 
   return (
     <div
       className={`${
         currentStep === 3
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-10 "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
+            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-auto "
+            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-auto "
           : "hidden"
       } p-5 2xl:py-10 px-7 `}>
       <div className="flex gap-4 justify-center items-center text-slate-500">
@@ -89,14 +116,14 @@ const Shipping = forwardRef((props, ref) => {
       <form className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
         <div className="mb-4">
           <label
-            htmlFor="country"
+            htmlFor="shippingCountry"
             className="block text-gray-700 font-bold mb-2">
             Country
           </label>
           <input
             type="text"
-            id="country"
-            name={sameAsAddress ? "country" : "shippingCountry"}
+            id="shippingCountry"
+            name="shippingCountry"
             value={sameAsAddress ? formData.country : formData.shippingCountry}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
@@ -104,15 +131,20 @@ const Shipping = forwardRef((props, ref) => {
             }`}
             readOnly={sameAsAddress}
           />
+          {errors.shippingCountry && (
+            <div className="text-red-500 text-xs">{errors.shippingCountry}</div>
+          )}
         </div>
         <div className="mb-4">
-          <label htmlFor="state" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="shippingState"
+            className="block text-gray-700 font-bold mb-2">
             State/Province
           </label>
           <input
             type="text"
-            id="state"
-            name={sameAsAddress ? "state" : "shippingState"}
+            id="shippingState"
+            name="shippingState"
             value={sameAsAddress ? formData.state : formData.shippingState}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
@@ -120,17 +152,20 @@ const Shipping = forwardRef((props, ref) => {
             }`}
             readOnly={sameAsAddress}
           />
+          {errors.shippingState && (
+            <div className="text-red-500 text-xs">{errors.shippingState}</div>
+          )}
         </div>
         <div className="mb-4">
           <label
-            htmlFor="zipcode"
+            htmlFor="shippingZipcode"
             className="block text-gray-700 font-bold mb-2">
             Zip/Postal Code
           </label>
           <input
             type="text"
-            id="zipcode"
-            name={sameAsAddress ? "zipcode" : "shippingZipcode"}
+            id="shippingZipcode"
+            name="shippingZipcode"
             value={sameAsAddress ? formData.zipcode : formData.shippingZipcode}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
@@ -138,33 +173,45 @@ const Shipping = forwardRef((props, ref) => {
             }`}
             readOnly={sameAsAddress}
           />
+          {errors.shippingZipcode && (
+            <div className="text-red-500 text-xs">{errors.shippingZipcode}</div>
+          )}
         </div>
         <div className="mb-4 col-span-1">
           <label
-            htmlFor="street"
+            htmlFor="shippingStreetAddress"
             className="block text-gray-700 font-bold mb-2">
             Street Address
           </label>
           <input
             type="text"
-            id="street"
-            name={sameAsAddress ? "street" : "shippingStreet"}
-            value={sameAsAddress ? formData.street : formData.shippingStreet}
+            id="shippingStreetAddress"
+            name="shippingStreetAddress"
+            value={
+              sameAsAddress ? formData.street : formData.shippingStreetAddress
+            }
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
               sameAsAddress ? "bg-gray-200" : ""
             }`}
             readOnly={sameAsAddress}
           />
+          {errors.shippingStreetAddress && (
+            <div className="text-red-500 text-xs">
+              {errors.shippingStreetAddress}
+            </div>
+          )}
         </div>
         <div className="mb-4 col-span-2">
-          <label htmlFor="city" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="shippingCitie"
+            className="block text-gray-700 font-bold mb-2">
             City
           </label>
           <input
             type="text"
-            id="city"
-            name={sameAsAddress ? "citie" : "shippingCity"}
+            id="shippingCitie"
+            name="shippingCitie"
             value={sameAsAddress ? formData.citie : formData.shippingCitie}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
@@ -172,17 +219,20 @@ const Shipping = forwardRef((props, ref) => {
             }`}
             readOnly={sameAsAddress}
           />
+          {errors.shippingCitie && (
+            <div className="text-red-500 text-xs">{errors.shippingCitie}</div>
+          )}
         </div>
         <div className="mb-4 col-span-2">
           <label
-            htmlFor="landmark"
+            htmlFor="shippingLandmark"
             className="block text-gray-700 font-bold mb-2">
             Landmark
           </label>
           <input
             type="text"
-            id="landmark"
-            name={sameAsAddress ? "landmark" : "shippingLandmark"}
+            id="shippingLandmark"
+            name="shippingLandmark"
             value={
               sameAsAddress ? formData.landmark : formData.shippingLandmark
             }

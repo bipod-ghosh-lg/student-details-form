@@ -8,11 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { prevStep } from "../../redux/slice/alumniStepSlice";
 import { FaRegAddressCard } from "react-icons/fa6";
-import { ToastContainer, toast } from "react-toastify";
 import { instance } from "../../redux/api";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import addressImg from "../../assets/images/location.png";
-// import "react-toastify/dist/ReactToastify.css";
 
 const Address = forwardRef((props, ref) => {
   const [countries, setCountries] = useState([]);
@@ -22,15 +20,18 @@ const Address = forwardRef((props, ref) => {
   const [isStateOpen, setIsStateOpen] = useState(false);
   const [countryIso, setCountryIso] = useState("");
   const [cities, setCities] = useState([]);
-  const [isCitiesOpen, setIsCitiesOpen] = useState(false)
+  const [isCitiesOpen, setIsCitiesOpen] = useState(false);
   const [filteredCities, setFilteredCities] = useState([]);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const formData = useSelector((state) => state.formData);
 
   const handleNext = () => {
-    navigate("/shipping"); // Next step
+    if (validateForm()) {
+      navigate("/shipping"); // Next step
+    }
   };
 
   const { currentStep, navigationDirection } = useSelector(
@@ -43,34 +44,41 @@ const Address = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
+    const newErrors = {};
     const { country, state, zipcode, street, citie } = formData;
 
     if (!country) {
-      toast.warn("Please fill country fields.");
+      newErrors.country = "Please fill in the country field.";
+      setErrors(newErrors);
       return false;
     }
 
     if (!state) {
-      toast.warn("Please fill state fields.");
+      newErrors.state = "Please fill in the state field.";
+      setErrors(newErrors);
       return false;
     }
 
     if (!zipcode) {
-      toast.warn("Please fill zip fields.");
+      newErrors.zipcode = "Please fill in the zip code field.";
+      setErrors(newErrors);
       return false;
     }
 
     if (!street) {
-      toast.warn("Please fill street fields.");
+      newErrors.street = "Please fill in the street address field.";
+      setErrors(newErrors);
       return false;
     }
 
     if (!citie) {
-      toast.warn("Please fill citie fields.");
+      newErrors.citie = "Please fill in the city field.";
+      setErrors(newErrors);
       return false;
     }
-    toast.success("Level 2 completed");
-    return true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   useImperativeHandle(ref, () => ({
@@ -79,7 +87,6 @@ const Address = forwardRef((props, ref) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name)
     dispatch(updateFormData({ [name]: value }));
 
     if (name === "country") {
@@ -95,15 +102,21 @@ const Address = forwardRef((props, ref) => {
     }
     if (name === "citie") {
       if (value) {
-        const filtered = cities.filter((cities) =>
-          cities.name.toLowerCase().includes(value.toLowerCase())
+        const filtered = cities.filter((city) =>
+          city.name.toLowerCase().includes(value.toLowerCase())
         );
         setFilteredCities(filtered);
       } else {
-        setFilteredCountries(cities);
+        setFilteredCities(cities);
       }
       setIsCitiesOpen(true);
     }
+
+    // Clear error message when user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
   };
 
   const getCountry = async () => {
@@ -127,14 +140,14 @@ const Address = forwardRef((props, ref) => {
   };
 
   const getcities = async (stateIso2) => {
-    console.log(countryIso, stateIso2)
+    console.log(countryIso, stateIso2);
     try {
       const response = await instance.get(
         `/${countryIso}/states/${stateIso2}/cities`
       );
       setCities(response.data);
     } catch (error) {
-      console.error("Error fetching states:", error);
+      console.error("Error fetching cities:", error);
     }
   };
 
@@ -145,10 +158,9 @@ const Address = forwardRef((props, ref) => {
   };
 
   const handleStateSelect = (state, iso2) => {
-    // console.log(iso2)
     dispatch(updateFormData({ state }));
     setIsStateOpen(false);
-    getcities(iso2)
+    getcities(iso2);
   };
 
   const handlecitieSelect = (citie) => {
@@ -186,8 +198,7 @@ const Address = forwardRef((props, ref) => {
             ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-10 "
             : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
           : "hidden"
-      } p-5 2xl:py-10 px-7 `}>
-      {/* <ToastContainer closeOnClick /> */}
+      } p-5 2xl:py-10 px-7`}>
       <div className="flex gap-4 justify-center items-center text-slate-500">
         <img src={addressImg} alt="addressImg" className="w-8 h-8" />
         <h2 className="text-2xl font-bold ">Address</h2>
@@ -208,9 +219,12 @@ const Address = forwardRef((props, ref) => {
             value={formData.country}
             onChange={handleChange}
             className="w-full p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            autoComplete="off"
             onClick={() => setIsCountryOpen(true)}
           />
+          {errors.country && (
+            <div className="text-red-500 text-xs">{errors.country}</div>
+          )}
           {isCountryOpen && (
             <div className="absolute z-10 max-h-40 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {filteredCountries.map((item) => (
@@ -236,9 +250,12 @@ const Address = forwardRef((props, ref) => {
             onChange={handleChange}
             readOnly
             className="w-full p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            autoComplete="off"
             onClick={() => setIsStateOpen(true)}
           />
+          {errors.state && (
+            <div className="text-red-500 text-xs">{errors.state}</div>
+          )}
           {isStateOpen && (
             <div className="absolute z-10 max-h-40 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {states.map((item) => (
@@ -253,7 +270,9 @@ const Address = forwardRef((props, ref) => {
           )}
         </div>
         <div className="mb-4">
-          <label htmlFor="zip" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="zipcode"
+            className="block text-gray-700 font-bold mb-2">
             Zip/Postal Code
           </label>
           <input
@@ -262,9 +281,12 @@ const Address = forwardRef((props, ref) => {
             name="zipcode"
             value={formData.zipcode}
             onChange={handleChange}
-            className="w-full  p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            className="w-full p-2 rounded-lg"
+            autoComplete="off"
           />
+          {errors.zipcode && (
+            <div className="text-red-500 text-xs">{errors.zipcode}</div>
+          )}
         </div>
         <div className="mb-4 col-span-1">
           <label
@@ -278,13 +300,16 @@ const Address = forwardRef((props, ref) => {
             name="street"
             value={formData.street}
             onChange={handleChange}
-            className="w-full  p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            className="w-full p-2 rounded-lg"
+            autoComplete="off"
           />
+          {errors.street && (
+            <div className="text-red-500 text-xs">{errors.street}</div>
+          )}
         </div>
         <div className="mb-4 col-span-2 relative">
           <label htmlFor="citie" className="block text-gray-700 font-bold mb-2">
-            citie
+            City
           </label>
           <input
             type="text"
@@ -292,12 +317,15 @@ const Address = forwardRef((props, ref) => {
             name="citie"
             value={formData.citie}
             onChange={handleChange}
-            className="w-full  p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            className="w-full p-2 rounded-lg"
+            autoComplete="off"
             onClick={() => setIsCitiesOpen(true)}
           />
+          {errors.citie && (
+            <div className="text-red-500 text-xs">{errors.citie}</div>
+          )}
           {isCitiesOpen && filteredCities && (
-            <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96  overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96 overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {filteredCities.map((item) => (
                 <div
                   key={item.id}
@@ -321,8 +349,8 @@ const Address = forwardRef((props, ref) => {
             name="landmark"
             value={formData.landmark}
             onChange={handleChange}
-            className="w-full  p-2 rounded-lg"
-            autoComplete="off" // Disable browser auto suggestion
+            className="w-full p-2 rounded-lg"
+            autoComplete="off"
           />
         </div>
       </form>
