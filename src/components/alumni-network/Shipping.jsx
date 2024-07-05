@@ -28,37 +28,37 @@ const Shipping = forwardRef((props, ref) => {
       shippingZipcode,
       shippingStreetAddress,
       shippingCitie,
+      shippingLandmark
     } = formData;
 
     if (!sameAsAddress) {
       if (!shippingCountry) {
         newErrors.shippingCountry = "Please fill country fields.";
-        setErrors(newErrors);
-        return false;
+        
       }
 
       if (!shippingState) {
         newErrors.shippingState = "Please fill state fields.";
-        setErrors(newErrors);
-        return false;
+        
       }
 
       if (!shippingZipcode) {
         newErrors.shippingZipcode = "Please fill zip fields.";
-        setErrors(newErrors);
-        return false;
+        
       }
 
       if (!shippingStreetAddress) {
         newErrors.shippingStreetAddress = "Please fill street fields.";
-        setErrors(newErrors);
-        return false;
+        
       }
 
       if (!shippingCitie) {
         newErrors.shippingCitie = "Please fill city fields.";
-        setErrors(newErrors);
-        return false;
+        
+      }
+
+      if (!shippingLandmark) {
+        newErrors.shippingLandmark = "Please fill landmark fields.";
       }
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
@@ -94,13 +94,15 @@ const Shipping = forwardRef((props, ref) => {
       className={`${
         currentStep === 3
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-auto "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-auto "
+            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-auto gap-10"
+            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
           : "hidden"
       } p-5 2xl:py-10 px-7 `}>
-      <div className="flex gap-4 justify-center items-center text-slate-500">
-        <img src={shippingImg} alt="shippingImg" className="w-8 h-8" />
-        <h2 className="text-2xl font-bold ">Shipping</h2>
+      <div className="flex flex-col md:flex-row gap-5 justify-center items-center text-slate-500">
+        <div className="flex gap-4 justify-center items-center">
+          <img src={shippingImg} alt="shippingImg" className="w-8 h-8" />
+          <h2 className="text-2xl font-bold ">Shipping</h2>
+        </div>
 
         <div className="h-fit flex items-center gap-2 text-xl font-semibold">
           <input
@@ -127,13 +129,13 @@ const Shipping = forwardRef((props, ref) => {
             value={sameAsAddress ? formData.country : formData.shippingCountry}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingCountry ?  "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />
-          {errors.shippingCountry && (
+          {/* {errors.shippingCountry && (
             <div className="text-red-500 text-xs">{errors.shippingCountry}</div>
-          )}
+          )} */}
         </div>
         <div className="mb-4">
           <label
@@ -148,13 +150,13 @@ const Shipping = forwardRef((props, ref) => {
             value={sameAsAddress ? formData.state : formData.shippingState}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingState ? "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />
-          {errors.shippingState && (
+          {/* {errors.shippingState && (
             <div className="text-red-500 text-xs">{errors.shippingState}</div>
-          )}
+          )} */}
         </div>
         <div className="mb-4">
           <label
@@ -163,19 +165,19 @@ const Shipping = forwardRef((props, ref) => {
             Zip/Postal Code
           </label>
           <input
-            type="text"
+            type="number"
             id="shippingZipcode"
             name="shippingZipcode"
             value={sameAsAddress ? formData.zipcode : formData.shippingZipcode}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingZipcode ? "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />
-          {errors.shippingZipcode && (
+          {/* {errors.shippingZipcode && (
             <div className="text-red-500 text-xs">{errors.shippingZipcode}</div>
-          )}
+          )} */}
         </div>
         <div className="mb-4 col-span-1">
           <label
@@ -192,15 +194,15 @@ const Shipping = forwardRef((props, ref) => {
             }
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingStreetAddress ? "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />
-          {errors.shippingStreetAddress && (
+          {/* {errors.shippingStreetAddress && (
             <div className="text-red-500 text-xs">
               {errors.shippingStreetAddress}
             </div>
-          )}
+          )} */}
         </div>
         <div className="mb-4 col-span-2">
           <label
@@ -215,13 +217,13 @@ const Shipping = forwardRef((props, ref) => {
             value={sameAsAddress ? formData.citie : formData.shippingCitie}
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingCitie ? "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />
-          {errors.shippingCitie && (
+          {/* {errors.shippingCitie && (
             <div className="text-red-500 text-xs">{errors.shippingCitie}</div>
-          )}
+          )} */}
         </div>
         <div className="mb-4 col-span-2">
           <label
@@ -238,7 +240,7 @@ const Shipping = forwardRef((props, ref) => {
             }
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : ""
+              sameAsAddress ? "bg-gray-200" : errors.shippingLandmark ? "border border-red-500" : ""
             }`}
             readOnly={sameAsAddress}
           />

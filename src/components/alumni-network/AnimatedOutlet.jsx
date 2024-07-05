@@ -80,43 +80,48 @@ const AnimatedOutlet = () => {
   };
 
   return (
-    <div className="h-full w-full max-w-4xl mx-auto flex flex-col justify-center items-center gap-4 overflow-hidden">
-      <div className="relative w-full">
-        <ToastContainer
-          // className={"absolute w-[70%] md:w-[40%]  top-0 left-0 md:left-[10%]"}
-          position="top-right"
-          autoClose={1000}
-        />
+    <div className="h-full w-full max-w-4xl mx-auto flex flex-col  items-center  overflow-hidden">
+      <div className="h-[15vh] w-full flex items-center justify-center">
+        <h1 className=" md:text-xl 2xl:text-3xl font-bold text-center">
+          Get Your Alumni Network Today
+        </h1>
       </div>
-      <div className="h-[75%] 2xl:h-[80%] w-[90vw] md:w-[80%] 2xl:w-[45vw] bg-white border rounded-lg shadow-lg flex justify-center items-center overflow-hidden">
-        <PersonalInformation ref={personalRef} />
-        <Address ref={addressRef} />
-        <Shipping ref={shippingRef} />
-        <CompanyDetails />
-        <CurrentRole ref={roleRef} />
-        <Education ref={educationRef} />
-        {formData.currentRole === "employer" && <WorkingDetails ref={workingRef}/>}
-      </div>
-      <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
-        <button
-          type="button"
-          onClick={handlePrev}
-          className={`p-2 rounded bg-[#00BDD6] ${
-            currentStep <= 1 ? "hidden" : "w-[40%]"
-          } col-span-2`}>
-          Back
-        </button>
-        <button
-          type="submit"
-          onClick={handleNext}
-          className={`p-2 rounded ${
-            formData.stepLength === currentStep ? "bg-blue-500" : "bg-[#00BDD6]"
-          }  ${currentStep <= 1 ? "w-full" : "w-[40%]"} col-span-2`}>
-          {formData.stepLength === currentStep ? "Submit" : "Next"}
-        </button>
-      </div>
-      <div className="absolute h-10 w-10 bottom-5 md:bottom-10 right-10 cursor-pointer">
-        <img src={whatsappImg} alt="" className="" />
+
+      <div className="h-fit w-fit flex flex-col gap-8 ">
+        <div className="h-fit min-h-[20vh] 2xl:max-h-[60vh] w-[90vw] md:w-[80%] 2xl:w-[45vw] mx-auto md:px-3 bg-white border  rounded-lg flex justify-center items-center overflow-y-auto overflow-x-hidden ">
+          <PersonalInformation ref={personalRef} />
+          <Address ref={addressRef} />
+          <Shipping ref={shippingRef} />
+          <CompanyDetails />
+          <CurrentRole ref={roleRef} />
+          <Education ref={educationRef} />
+          {formData.currentRole === "employer" && (
+            <WorkingDetails ref={workingRef} />
+          )}
+        </div>
+        <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className={`p-2 rounded bg-[#00BDD6] ${
+              currentStep <= 1 ? "hidden" : "w-[40%]"
+            } col-span-2`}>
+            Back
+          </button>
+          <button
+            type="submit"
+            onClick={handleNext}
+            className={`p-2 rounded ${
+              formData.stepLength === currentStep
+                ? "bg-blue-500"
+                : "bg-[#00BDD6]"
+            }  ${currentStep <= 1 ? "w-full" : "w-[40%]"} col-span-2`}>
+            {formData.stepLength === currentStep ? "Submit" : "Next"}
+          </button>
+        </div>
+        <div className="absolute h-10 w-10 bottom-5 md:bottom-10 right-10 cursor-pointer">
+          <img src={whatsappImg} alt="" className="" />
+        </div>
       </div>
     </div>
   );

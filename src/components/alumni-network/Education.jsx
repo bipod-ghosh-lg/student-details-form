@@ -56,39 +56,32 @@ const Education = forwardRef((props, ref) => {
       newErrors.institution = "Please fill your institution name.";
     if (!degree) {
       newErrors.degree = "Please fill your degree.";
-      setErrors(newErrors);
-      return false;
+      
     }
     if (!fieldOfStudy) {
       newErrors.fieldOfStudy = "Please fill your field.";
-      setErrors(newErrors);
-      return false;
+      
     }
     if (!course) {
       newErrors.course = "Please fill your course.";
-      setErrors(newErrors);
-      return false;
+      
     }
     if (!graduationYear){
       newErrors.graduationYear = "Please fill your graduation year.";
-      setErrors(newErrors);
-      return false;
+      
     }
     if (!educationCountry) {
       newErrors.educationCountry = "Please fill your country.";
-      setErrors(newErrors);
-      return false;
+      
     }
       
     if (!educationState) {
       newErrors.educationState = "Please fill your state.";
-      setErrors(newErrors);
-      return false;
+      
     }
     if (!educationCitie) {
       newErrors.educationCitie = "Please fill your city.";
-      setErrors(newErrors);
-      return false;
+      
     }
 
     setErrors(newErrors);
@@ -132,12 +125,12 @@ const Education = forwardRef((props, ref) => {
             type="text"
             value={formData.institution}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`${errors.institution && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
             required
           />
-          {errors.institution && (
+          {/* {errors.institution && (
             <p className="text-red-500 text-xs italic">{errors.institution}</p>
-          )}
+          )} */}
         </div>
 
         <div className="mb-4">
@@ -151,16 +144,16 @@ const Education = forwardRef((props, ref) => {
             name="degree"
             value={formData.degree}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`${errors.degree && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Degree</option>
             <option value="Bachelors">Bachelors</option>
             <option value="Masters">Masters</option>
             <option value="PhD">PhD</option>
           </select>
-          {errors.degree && (
+          {/* {errors.degree && (
             <p className="text-red-500 text-xs italic">{errors.degree}</p>
-          )}
+          )} */}
         </div>
 
         <div className="mb-4">
@@ -174,7 +167,7 @@ const Education = forwardRef((props, ref) => {
             name="fieldOfStudy"
             value={formData.fieldOfStudy}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`${errors.fieldOfStudy && "border border-red-500"} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Field of Study</option>
             {fieldsAndCourses.map((fieldObj) => (
@@ -183,9 +176,9 @@ const Education = forwardRef((props, ref) => {
               </option>
             ))}
           </select>
-          {errors.fieldOfStudy && (
+          {/* {errors.fieldOfStudy && (
             <p className="text-red-500 text-xs italic">{errors.fieldOfStudy}</p>
-          )}
+          )} */}
         </div>
 
         <div className="mb-4">
@@ -199,7 +192,7 @@ const Education = forwardRef((props, ref) => {
             name="course"
             value={formData.course}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`${errors.course && "border border-red-500"} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Course</option>
             {courses.map((course) => (
@@ -208,9 +201,9 @@ const Education = forwardRef((props, ref) => {
               </option>
             ))}
           </select>
-          {errors.course && (
+          {/* {errors.course && (
             <p className="text-red-500 text-xs italic">{errors.course}</p>
-          )}
+          )} */}
         </div>
 
         <div className="mb-4">
@@ -225,14 +218,14 @@ const Education = forwardRef((props, ref) => {
             type="number"
             value={formData.graduationYear}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`${errors.graduationYear && "border border-red-500 "} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
             required
           />
-          {errors.graduationYear && (
+          {/* {errors.graduationYear && (
             <p className="text-red-500 text-xs italic">
               {errors.graduationYear}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700 text-sm">Country</label>
@@ -242,13 +235,13 @@ const Education = forwardRef((props, ref) => {
             name="educationCountry"
             value={formData.educationCountry}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={` ${errors.educationCountry && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.educationCountry && (
+          {/* {errors.educationCountry && (
             <p className="text-red-500 text-xs italic">
               {errors.educationCountry}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700 text-sm">State</label>
@@ -258,13 +251,13 @@ const Education = forwardRef((props, ref) => {
             name="educationState"
             value={formData.educationState}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={` ${errors.educationState && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.educationState && (
+          {/* {errors.educationState && (
             <p className="text-red-500 text-xs italic">
               {errors.educationState}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700 text-sm">City</label>
@@ -274,13 +267,13 @@ const Education = forwardRef((props, ref) => {
             name="educationCitie"
             value={formData.educationCitie}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={` ${errors.educationCitie && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.educationCitie && (
+          {/* {errors.educationCitie && (
             <p className="text-red-500 text-xs italic">
               {errors.educationCitie}
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -38,43 +38,27 @@ const PersonalInformation = forwardRef((props, ref) => {
 
     if (!firstName) {
       newErrors.firstName = "Please fill in the First Name.";
-      setErrors(newErrors);
-      return false
     }
     if (!lastName) {
       newErrors.lastName = "Please fill in the Last Name.";
-      setErrors(newErrors);
-      return false;
     }
-    
-     if (!email) {
-       newErrors.email = "Please fill in the Email Address.";
-       setErrors(newErrors);
-       return false;
-     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-       newErrors.email = "Please enter a valid email address.";
-       setErrors(newErrors);
-       return false;
-     }
+
+    if (!email) {
+      newErrors.email = "Please fill in the Email Address.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
     if (!phone) {
       newErrors.phone = "Please fill in the Phone Number.";
-      setErrors(newErrors);
-      return false;
     }
     if (!whatsapp) {
       newErrors.whatsapp = "Please fill in the WhatsApp Number.";
-      setErrors(newErrors);
-      return false;
     }
     if (!dob) {
       newErrors.dob = "Please fill in the Date of Birth.";
-      setErrors(newErrors);
-      return false;
     }
     if (!gender) {
       newErrors.gender = "Please select a Gender.";
-      setErrors(newErrors);
-      return false;
     }
 
     setErrors(newErrors);
@@ -89,73 +73,91 @@ const PersonalInformation = forwardRef((props, ref) => {
     <div
       className={`${
         currentStep === 1
-          ? "flex flex-col justify-center items-center slide-in-left"
+          ? "flex flex-col  justify-center items-center slide-in-left gap-4 xl:gap-8 2xl:gap-10"
           : "hidden slide-out-right"
-      } p-5 2xl:py-10 px-7 w-full h-full`}>
-      <div className="flex gap-2 mb-4 items-center">
+      } py-5 md:py-14  px-7 w-full h-full  `}>
+      <div className="flex gap-2  items-center text-slate-500">
         <IoPerson className="text-2xl text-[#00BDD6]" />
         <h2 className="text-xl font-bold">Personal Information</h2>
       </div>
 
-      <form className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
-        <div className="h-fit">
-          <label className="block text-gray-700">First Name</label>
+      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-5 2xl:gap-x-12 ">
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            First Name
+          </label>
           <input
             type="text"
             id="firstName"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={`${
+              errors.firstName && "border border-red-500"
+            } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
-          {errors.firstName && (
+          {/* {errors.firstName && (
             <p className="text-red-500 text-xs italic">{errors.firstName}</p>
-          )}
+          )} */}
         </div>
-        <div className="h-fit">
-          <label className="block text-gray-700">Last Name</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            Last Name
+          </label>
           <input
             type="text"
             id="lastName"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={` ${
+              errors.lastName && "border border-red-500"
+            } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
-          {errors.lastName && (
+          {/* {errors.lastName && (
             <p className="text-red-500 text-xs italic">{errors.lastName}</p>
-          )}
+          )} */}
         </div>
-        <div className="h-fit col-span-2">
-          <label className="block text-gray-700">Email Address</label>
+        <div className="h-fit flex flex-col gap-1 col-span-2">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            Email Address
+          </label>
           <input
             type="email"
             id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={`${
+              errors.email && "border border-red-500"
+            }  block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
-          {errors.email && (
+          {/* {errors.email && (
             <p className="text-red-500 text-xs italic">{errors.email}</p>
-          )}
+          )} */}
         </div>
-        <div className="h-fit col-span-2">
-          <label className="block text-gray-700">Phone Number</label>
+        <div className="h-fit flex flex-col gap-1 col-span-2">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            Phone Number
+          </label>
           <input
             type="number"
             id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={`${
+              errors.phone && "border border-red-500 "
+            } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
-          {errors.phone && (
+          {/* {errors.phone && (
             <p className="text-red-500 text-xs italic">{errors.phone}</p>
-          )}
+          )} */}
         </div>
-        <div className="h-fit col-span-2">
-          <label className="block text-gray-700">WhatsApp Number</label>
+        <div className="h-fit flex flex-col gap-1 col-span-2">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            WhatsApp Number
+          </label>
           <input
             type="number"
             name="whatsapp"
@@ -163,50 +165,63 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={sameAsPhone ? formData.phone : formData.whatsapp}
             onChange={handleChange}
             disabled={sameAsPhone}
-            className="block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={`${
+              errors.whatsapp && "border border-red-500 "
+            }block w-full rounded-md  shadow-sm py-1 px-2`}
           />
-          {errors.whatsapp && (
+          {/* {errors.whatsapp && (
             <p className="text-red-500 text-xs italic">{errors.whatsapp}</p>
-          )}
-          <div className="h-fit mt-2 flex items-center">
+          )} */}
+          <div className="h-fit  flex items-center">
             <input
               type="checkbox"
               checked={sameAsPhone}
               onChange={handleCheckboxChange}
               className="h-4 w-4 checked:border-white accent-[#00BDD6]"
             />
-            <label className="ml-2 text-gray-700">Same as Phone Number</label>
+            <label className="ml-2 text-gray-700 ">Same as Phone Number</label>
           </div>
         </div>
-        <div className="h-fit mb-4">
-          <label className="block text-gray-700">Date of Birth</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+            Date of Birth
+          </label>
           <input
             type="date"
             id="dob"
             name="dob"
             value={formData.dob}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-1 px-2"
+            className={`${
+              errors.dob ? "border border-red-500" : "border-gray-300"
+            } block w-full rounded-md  shadow-sm py-1 px-2`}
           />
-          {errors.dob && (
+          {/* {errors.dob && (
             <p className="text-red-500 text-xs italic">{errors.dob}</p>
-          )}
+          )} */}
         </div>
-        <div className="h-fit mb-4">
-          <label className=" text-gray-700">Gender</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className=" text-gray-700 text-sm 2xl:text-md font-bold">
+            Gender
+          </label>
           <select
             name="gender"
             id="gender"
             value={formData.gender}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm p-1">
+            className={`${
+              errors.gender && "border border-red-500"
+            } block w-full rounded-md border-gray-300 shadow-sm p-1 `}>
+            <option value="" disabled>
+              Gender
+            </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
-          {errors.gender && (
+          {/* {errors.gender && (
             <p className="text-red-500 text-xs italic">{errors.gender}</p>
-          )}
+          )} */}
         </div>
       </form>
     </div>

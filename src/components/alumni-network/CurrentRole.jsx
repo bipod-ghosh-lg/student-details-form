@@ -56,7 +56,7 @@ const CurrentRole = forwardRef((props, ref) => {
           Select your current role
         </label>
         <select
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className={`${errors.currentRole && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           name="currentRole"
           id="currentRole"
           value={formData.currentRole}
@@ -67,9 +67,9 @@ const CurrentRole = forwardRef((props, ref) => {
           <option value="student">Student</option>
           <option value="employer">Employer</option>
         </select>
-        {errors.currentRole && (
+        {/* {errors.currentRole && (
           <p className="text-red-500 text-xs italic">{errors.currentRole}</p>
-        )}
+        )} */}
       </div>
     </div>
   );

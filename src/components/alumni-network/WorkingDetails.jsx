@@ -97,13 +97,13 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingCompany"
             value={formData.workingCompany}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={`" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3" ${errors.workingCompany && "border border-red-500" }`}
           />
-          {errors.workingCompany && (
+          {/* {errors.workingCompany && (
             <p className="text-red-500 text-xs italic">
               {errors.workingCompany}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700" htmlFor="industry">
@@ -114,7 +114,7 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingIndustry"
             value={formData.workingIndustry}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            className={`${errors.workingIndustry && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}>
             <option value="" disabled>
               Select your industry
             </option>
@@ -124,11 +124,11 @@ const WorkingDetails = forwardRef((props, ref) => {
               </option>
             ))}
           </select>
-          {errors.workingIndustry && (
+          {/* {errors.workingIndustry && (
             <p className="text-red-500 text-xs italic">
               {errors.workingIndustry}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">What is your Role</label>
@@ -138,11 +138,11 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingRole"
             value={formData.workingRole}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={` ${errors.workingRole && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.workingRole && (
+          {/* {errors.workingRole && (
             <p className="text-red-500 text-xs italic">{errors.workingRole}</p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">Country</label>
@@ -152,13 +152,13 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingCountry"
             value={formData.workingCountry}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={` ${errors.workingCountry && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.workingCountry && (
+          {/* {errors.workingCountry && (
             <p className="text-red-500 text-xs italic">
               {errors.workingCountry}
             </p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">State</label>
@@ -168,11 +168,11 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingState"
             value={formData.workingState}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={`${errors.workingState && "border border-red-500" } block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.workingState && (
+          {/* {errors.workingState && (
             <p className="text-red-500 text-xs italic">{errors.workingState}</p>
-          )}
+          )} */}
         </div>
         <div className="h-fit flex flex-col gap-2">
           <label className="block text-gray-700">City</label>
@@ -182,11 +182,11 @@ const WorkingDetails = forwardRef((props, ref) => {
             name="workingCitie"
             value={formData.workingCitie}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            className={`${errors.workingCitie && "border border-red-500" } block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
           />
-          {errors.workingCitie && (
+          {/* {errors.workingCitie && (
             <p className="text-red-500 text-xs italic">{errors.workingCitie}</p>
-          )}
+          )} */}
         </div>
       </div>
     </div>

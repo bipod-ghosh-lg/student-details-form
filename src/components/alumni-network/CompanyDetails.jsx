@@ -24,7 +24,7 @@ const CompanyDetails = () => {
       } p-5 2xl:py-10 px-7 `}>
       <div className="flex gap-4 justify-center items-center text-slate-500">
         <img src={companyImg} alt="companyImg" className="w-8 h-8" />
-        <h2 className="text-2xl font-bold ">Company Details(if any)</h2>
+        <h2 className=" text-xl md:text-2xl font-bold text-nowrap ">Company Details(if any)</h2>
       </div>
       <div className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
         <div className="h-fit flex flex-col gap-2">

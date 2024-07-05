@@ -45,36 +45,31 @@ const Address = forwardRef((props, ref) => {
 
   const validateForm = () => {
     const newErrors = {};
-    const { country, state, zipcode, street, citie } = formData;
+    const { country, state, zipcode, street, citie, landmark } = formData;
 
     if (!country) {
       newErrors.country = "Please fill in the country field.";
-      setErrors(newErrors);
-      return false;
+      console.log(newErrors);
     }
 
     if (!state) {
       newErrors.state = "Please fill in the state field.";
-      setErrors(newErrors);
-      return false;
     }
 
     if (!zipcode) {
       newErrors.zipcode = "Please fill in the zip code field.";
-      setErrors(newErrors);
-      return false;
     }
 
     if (!street) {
       newErrors.street = "Please fill in the street address field.";
-      setErrors(newErrors);
-      return false;
     }
 
     if (!citie) {
       newErrors.citie = "Please fill in the city field.";
-      setErrors(newErrors);
-      return false;
+    }
+
+    if (!landmark) {
+      newErrors.landmark = "Please fill in the landmark field.";
     }
 
     setErrors(newErrors);
@@ -195,20 +190,20 @@ const Address = forwardRef((props, ref) => {
       className={`${
         currentStep === 2
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-10 "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
+            ? "h-full w-full slide-in-right flex flex-col justify-center items-center "
+            : "h-full w-full slide-in-left flex flex-col justify-center items-center  "
           : "hidden"
-      } p-5 2xl:py-10 px-7`}>
+      } py-4 2xl:py-10 gap-5  px-7`}>
       <div className="flex gap-4 justify-center items-center text-slate-500">
         <img src={addressImg} alt="addressImg" className="w-8 h-8" />
-        <h2 className="text-2xl font-bold ">Address</h2>
+        <h2 className="text-xl font-bold ">Address</h2>
       </div>
 
-      <form className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
-        <div className="mb-4 relative" id="country-dropdown">
-          <label
-            htmlFor="country"
-            className="block text-gray-700 font-bold mb-2">
+      <form
+        className="w-full h-fit  grid grid-cols-2 gap-2 2xl:gap-x-12 text-sm 2xl:text-lg font-normal"
+        autocomplete="nope">
+        <div className=" relative" id="country-dropdown">
+          <label htmlFor="country" className="block text-gray-700 ">
             Country
           </label>
           <input
@@ -218,15 +213,17 @@ const Address = forwardRef((props, ref) => {
             name="country"
             value={formData.country}
             onChange={handleChange}
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={`${
+              errors.country ? " border border-red-500  " : ""
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
             onClick={() => setIsCountryOpen(true)}
           />
-          {errors.country && (
+          {/* {errors.country && (
             <div className="text-red-500 text-xs">{errors.country}</div>
-          )}
+          )} */}
           {isCountryOpen && (
-            <div className="absolute z-10 max-h-40 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {filteredCountries.map((item) => (
                 <div
                   key={item.id}
@@ -239,7 +236,7 @@ const Address = forwardRef((props, ref) => {
           )}
         </div>
         <div className="mb-4 relative" id="state-dropdown">
-          <label htmlFor="state" className="block text-gray-700 font-bold mb-2">
+          <label htmlFor="state" className="block text-gray-700  ">
             State/Province
           </label>
           <input
@@ -249,15 +246,17 @@ const Address = forwardRef((props, ref) => {
             value={formData.state}
             onChange={handleChange}
             readOnly
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={`${
+              errors.state ? "border border-red-500" : ""
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
             onClick={() => setIsStateOpen(true)}
           />
-          {errors.state && (
+          {/* {errors.state && (
             <div className="text-red-500 text-xs">{errors.state}</div>
-          )}
+          )} */}
           {isStateOpen && (
-            <div className="absolute z-10 max-h-40 w-full overflow-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {states.map((item) => (
                 <div
                   key={item.id}
@@ -269,10 +268,8 @@ const Address = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="zipcode"
-            className="block text-gray-700 font-bold mb-2">
+        <div className="">
+          <label htmlFor="zipcode" className="block text-gray-700 ">
             Zip/Postal Code
           </label>
           <input
@@ -281,17 +278,17 @@ const Address = forwardRef((props, ref) => {
             name="zipcode"
             value={formData.zipcode}
             onChange={handleChange}
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={` ${
+              errors.zipcode ? "border border-red-500" : ""
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
           />
-          {errors.zipcode && (
+          {/* {errors.zipcode && (
             <div className="text-red-500 text-xs">{errors.zipcode}</div>
-          )}
+          )} */}
         </div>
-        <div className="mb-4 col-span-1">
-          <label
-            htmlFor="street"
-            className="block text-gray-700 font-bold mb-2">
+        <div className=" col-span-1">
+          <label htmlFor="street" className="block text-gray-700  ">
             Street Address
           </label>
           <input
@@ -300,15 +297,17 @@ const Address = forwardRef((props, ref) => {
             name="street"
             value={formData.street}
             onChange={handleChange}
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={` ${
+              errors.street ? "border border-red-500" : ""
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
           />
-          {errors.street && (
+          {/* {errors.street && (
             <div className="text-red-500 text-xs">{errors.street}</div>
-          )}
+          )} */}
         </div>
-        <div className="mb-4 col-span-2 relative">
-          <label htmlFor="citie" className="block text-gray-700 font-bold mb-2">
+        <div className=" col-span-2 relative">
+          <label htmlFor="citie" className="block text-gray-700  ">
             City
           </label>
           <input
@@ -317,13 +316,15 @@ const Address = forwardRef((props, ref) => {
             name="citie"
             value={formData.citie}
             onChange={handleChange}
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={` ${
+              errors.citie && "border border-red-500"
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
             onClick={() => setIsCitiesOpen(true)}
           />
-          {errors.citie && (
+          {/* {errors.citie && (
             <div className="text-red-500 text-xs">{errors.citie}</div>
-          )}
+          )} */}
           {isCitiesOpen && filteredCities && (
             <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96 overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
               {filteredCities.map((item) => (
@@ -337,20 +338,21 @@ const Address = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        <div className="mb-4 col-span-2">
-          <label
-            htmlFor="landmark"
-            className="block text-gray-700 font-bold mb-2">
+        <div className=" col-span-2">
+          <label htmlFor="landmark" className="block text-gray-700  ">
             Landmark
           </label>
           <input
             type="text"
             id="landmark"
             name="landmark"
+            placeholder="Landmark"
             value={formData.landmark}
             onChange={handleChange}
-            className="w-full p-2 rounded-lg"
-            autoComplete="off"
+            className={` ${
+              errors.landmark ? "border border-red-500" : ""
+            } w-full px-2 py-1 rounded-lg`}
+            autoComplete="nope"
           />
         </div>
       </form>

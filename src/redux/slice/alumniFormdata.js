@@ -8,7 +8,7 @@ const initialState = {
   phone: "",
   whatsapp: "",
   dob: "",
-  gender: "Male",
+  gender: "",
   country: "",
   state: "",
   citie: "",

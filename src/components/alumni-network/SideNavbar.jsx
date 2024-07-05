@@ -4,6 +4,7 @@ import { setStep } from "../../redux/slice/alumniStepSlice";
 import { IoExitOutline } from "react-icons/io5";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import { TbProgressCheck } from "react-icons/tb";
+import { FaRegDotCircle } from "react-icons/fa";
 
 const SideNavbar = () => {
   const { currentStep, completedSteps } = useSelector(
@@ -44,7 +45,7 @@ const SideNavbar = () => {
   }, [currentStep]);
 
   return (
-    <div className="p-3 2xl:p-6 flex flex-col justify-between bg-gray-100 border shadow-lg md:w-full h-full md:min-h-[90vh] text-nowrap">
+    <div className="p-3 2xl:py-6 2xl:px-8 flex flex-col justify-between bg-gray-100 border shadow-lg md:w-full h-full md:min-h-full text-nowrap">
       <div className="w-full flex md:flex-col overflow-scroll custom-scrollbar">
         {steps.map((step, index) => (
           <div
@@ -64,12 +65,13 @@ const SideNavbar = () => {
               }`}
               onClick={() => dispatch(setStep(index + 1))}>
               {index + 1 < currentStep ? (
-                <TbProgressCheck size={20} />
+                <TbProgressCheck size={25} />
+              ) : index + 1 === currentStep ? (
+                <FaRegDotCircle size={20} />
               ) : (
                 <input
                   type="radio"
                   readOnly
-                  checked={index + 1 === currentStep}
                   className="h-4 w-4 accent-[#00BDD6] border-4 !border-white"
                 />
               )}
