@@ -22,7 +22,7 @@ const AnimatedOutlet = () => {
   const shippingRef = useRef();
   const roleRef = useRef();
   const educationRef = useRef();
-  const companyRef = useRef();
+  const workingRef = useRef();
   const { currentStep } = useSelector((state) => state.stepsSlice);
   const formData = useSelector((state) => state.formData);
 
@@ -65,6 +65,14 @@ const AnimatedOutlet = () => {
     ) {
       if (formData.currentRole === "employer") dispatch(nextStep());
     }
+    if (
+      currentStep === 7 &&
+      workingRef.current &&
+      workingRef.current.validateForm()
+    ) {
+      dispatch(nextStep());
+    }
+    
   };
 
   const handlePrev = () => {
@@ -87,7 +95,7 @@ const AnimatedOutlet = () => {
         <CompanyDetails />
         <CurrentRole ref={roleRef} />
         <Education ref={educationRef} />
-        {formData.currentRole === "employer" && <WorkingDetails />}
+        {formData.currentRole === "employer" && <WorkingDetails ref={workingRef}/>}
       </div>
       <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
         <button

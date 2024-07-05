@@ -25,14 +25,39 @@ const WorkingDetails =forwardRef((props, ref) => {
       "Energy",
     ];
     const validateForm = () => {
-      const {  } = formData;
+      const { workingCompany, workingIndustry, workingRole, workingCountry, workingState, workingCitie } = formData;
 
-      if (!currentRole) {
+      if (!workingCompany) {
+        toast.warn("Please fill company name.");
+        return false;
+      }
+
+      if (!workingIndustry) {
+        toast.warn("Please select industry.");
+        return false;
+      }
+
+      if (!workingRole) {
         toast.warn("Please fill your role.");
         return false;
       }
 
-      toast.success("Level 5 completed");
+      if (!workingCountry) {
+        toast.warn("Please select country.");
+        return false;
+      }
+
+      if (!workingState) {
+        toast.warn("Please select state.");
+        return false;
+      }
+
+      if (!workingCitie) {
+        toast.warn("Please select citie.");
+        return false;
+      }
+
+      toast.success("Form submitted successfully.");
       return true;
     };
 
