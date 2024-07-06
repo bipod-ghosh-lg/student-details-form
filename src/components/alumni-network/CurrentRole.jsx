@@ -43,26 +43,30 @@ const CurrentRole = forwardRef((props, ref) => {
       className={`${
         currentStep === 5
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-10 "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
+            ? " slide-in-right "
+            : "slide-in-left"
           : "hidden"
-      } p-5 2xl:py-10 px-7 `}>
-      <div className="flex gap-4 justify-center items-center text-slate-500">
+      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
+      <div className="flex gap-4   text-slate-500">
         <img src={titleImg} alt="titleImg" className="w-8 h-7" />
-        <h2 className="text-2xl font-bold ">Current Role</h2>
+        <h2 className="text-xl font-bold  ">Current Role</h2>
       </div>
-      <div className="h-fit col-span-2 flex flex-col w-full justify-center items-center gap-4 text-nowrap">
-        <label htmlFor="currentRole" className="block text-lg">
-          Select your current role
+      <div className="h-fit col-span-2 flex flex-col w-full justify-center  gap-1  xl:gap-y-2 2xl:gap-2 text-nowrap">
+        <label
+          htmlFor="currentRole"
+          className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+          I am Currently a
         </label>
         <select
-          className={`${errors.currentRole && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+          className={`${
+            errors.currentRole && "border border-red-500 "
+          }shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
           name="currentRole"
           id="currentRole"
           value={formData.currentRole}
           onChange={handleChange}>
           <option value="" disabled>
-            Select your current role
+            --Select your role--
           </option>
           <option value="student">Student</option>
           <option value="employer">Employer</option>

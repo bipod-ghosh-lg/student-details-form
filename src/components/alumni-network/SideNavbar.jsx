@@ -11,6 +11,9 @@ const SideNavbar = () => {
     (state) => state.stepsSlice
   );
   const formData = useSelector((state) => state.formData);
+  const { personal, address, shipping, role, education, working,submitClicked } =
+    formData.validationErrors;
+
   const dispatch = useDispatch();
 
   const baseSteps = [
@@ -21,6 +24,16 @@ const SideNavbar = () => {
     "Current Role",
     "Education",
   ];
+const company = true;
+  const formValidationArray = [
+    personal,
+    address,
+    shipping,
+    company,
+    role,
+    education,
+    working,
+  ]
 
   // Conditionally add the "Employer Details" step
   const steps =
@@ -45,7 +58,7 @@ const SideNavbar = () => {
   }, [currentStep]);
 
   return (
-    <div className="p-3 2xl:py-6 2xl:px-8 flex flex-col justify-between bg-gray-100 border shadow-lg md:w-full h-full md:min-h-full text-nowrap">
+    <div className="p-3 2xl:py-6 2xl:px-8 flex flex-col justify-between bg-[#FAFAFC] shadow-md  w-full h-full md:min-h-full text-nowrap">
       <div className="w-full flex md:flex-col overflow-scroll custom-scrollbar">
         {steps.map((step, index) => (
           <div
@@ -55,7 +68,7 @@ const SideNavbar = () => {
             <div
               className={`w-full h-1 md:w-1 md:h-10 transition-all duration-500 ${
                 index + 1 === currentStep
-                  ? "bg-[#00BDD6] rounded-lg"
+                  ? "bg-[#00BDD5] rounded-lg"
                   : "bg-inherit"
               }`}></div>
 
@@ -72,21 +85,30 @@ const SideNavbar = () => {
                 <input
                   type="radio"
                   readOnly
-                  className="h-4 w-4 accent-[#00BDD6] border-4 !border-white"
+                  className="h-4 w-4 accent-[#00BDD5] border-4 !border-white"
                 />
               )}
-
-              {step}
+              {console.log(formValidationArray[index])}
+              <p
+                className={`text-sm ${
+                  !formValidationArray[index] &&
+                  index  < currentStep &&
+                  submitClicked
+                    ? "text-red-500"
+                    : ""
+                }`}>
+                {step}
+              </p>
             </div>
           </div>
         ))}
       </div>
-      <div className="hidden md:flex flex-col justify-center items-center gap-4">
+      <div className="hidden md:flex flex-col justify-center items-center gap-4 p-3">
         <div className="flex items-center justify-center gap-2 bg-red-400 text-white py-2 w-full px-5 rounded-md cursor-pointer">
           <IoExitOutline />
           <p className="">Logout</p>
         </div>
-        <button className="text-[#00BDD6]">? Help & Feedback</button>
+        <button className="text-[#00BDD5]">? Help & Feedback</button>
       </div>
     </div>
   );

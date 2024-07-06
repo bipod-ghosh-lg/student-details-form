@@ -4,6 +4,10 @@ import { IoPerson } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
+import { BsPerson } from "react-icons/bs";
+import { PiGenderFemaleBold, PiGenderMaleBold } from "react-icons/pi";
+import { PiGenderTransgenderBold } from "react-icons/pi";
+import { FcCalendar } from "react-icons/fc";
 
 const PersonalInformation = forwardRef((props, ref) => {
   const [sameAsPhone, setSameAsPhone] = useState(true);
@@ -32,8 +36,16 @@ const PersonalInformation = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-    const { firstName, lastName, email, phone, whatsapp, dob, gender } =
-      formData;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      whatsapp,
+      dob,
+      gender,
+      personalValidationErrors,
+    } = formData;
     const newErrors = {};
 
     if (!firstName) {
@@ -73,17 +85,17 @@ const PersonalInformation = forwardRef((props, ref) => {
     <div
       className={`${
         currentStep === 1
-          ? "flex flex-col  justify-center items-center slide-in-left gap-4 xl:gap-8 2xl:gap-10"
+          ? "flex flex-col  justify-center slide-in-left gap-4 xl:gap-6 2xl:gap-10"
           : "hidden slide-out-right"
-      } py-5 md:py-14  px-7 w-full h-full  `}>
+      } py-5 md:py-6 2xl:py-16  px-7 w-full h-full  `}>
       <div className="flex gap-2  items-center text-slate-500">
-        <IoPerson className="text-2xl text-[#00BDD6]" />
+        <BsPerson className="text-2xl text-[#00BDD6]" />
         <h2 className="text-xl font-bold">Personal Information</h2>
       </div>
 
-      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-5 2xl:gap-x-12 ">
+      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 ">
         <div className="h-fit flex flex-col gap-1">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             First Name
           </label>
           <input
@@ -101,7 +113,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Last Name
           </label>
           <input
@@ -119,7 +131,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1 col-span-2">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Email Address
           </label>
           <input
@@ -137,7 +149,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1 col-span-2">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Phone Number
           </label>
           <input
@@ -155,7 +167,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1 col-span-2">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             WhatsApp Number
           </label>
           <input
@@ -183,7 +195,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           </div>
         </div>
         <div className="h-fit flex flex-col gap-1">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Date of Birth
           </label>
           <input
@@ -194,31 +206,45 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             className={`${
               errors.dob ? "border border-red-500" : "border-gray-300"
-            } block w-full rounded-md  shadow-sm py-1 px-2`}
+            } block w-full rounded-md  shadow-sm py-1 px-2 `}
           />
           {/* {errors.dob && (
             <p className="text-red-500 text-xs italic">{errors.dob}</p>
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
-          <label className=" text-gray-700 text-sm 2xl:text-md font-bold">
+          <label className=" text-gray-700 text-sm 2xl:text-md font-semibold">
             Gender
           </label>
-          <select
-            name="gender"
-            id="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className={`${
-              errors.gender && "border border-red-500"
-            } block w-full rounded-md border-gray-300 shadow-sm p-1 `}>
-            <option value="" disabled>
-              Gender
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+          <div
+            className={`w-full flex gap-4 items-center bg-[#F3F4F6] px-2 py-1 rounded-md ${
+              errors.gender && "border border-red-500  "
+            }`}>
+            <select
+              name="gender"
+              id="gender"
+              value={formData.gender}
+              draggable
+              onChange={handleChange}
+              className={` block w-full px-1 ${
+                formData.gender !== "" && "appearance-none"
+              }`}>
+              <option value="" disabled className="">
+                Gender
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            {formData.gender === "" ? null : formData.gender === "Male" ? (
+              <PiGenderMaleBold className="" />
+            ) : formData.gender === "Female" ? (
+              <PiGenderFemaleBold className="" />
+            ) : (
+              <PiGenderTransgenderBold className="" />
+            )}
+          </div>
+
           {/* {errors.gender && (
             <p className="text-red-500 text-xs italic">{errors.gender}</p>
           )} */}

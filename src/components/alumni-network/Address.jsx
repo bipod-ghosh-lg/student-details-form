@@ -49,7 +49,6 @@ const Address = forwardRef((props, ref) => {
 
     if (!country) {
       newErrors.country = "Please fill in the country field.";
-      console.log(newErrors);
     }
 
     if (!state) {
@@ -135,7 +134,6 @@ const Address = forwardRef((props, ref) => {
   };
 
   const getcities = async (stateIso2) => {
-    console.log(countryIso, stateIso2);
     try {
       const response = await instance.get(
         `/${countryIso}/states/${stateIso2}/cities`
@@ -183,27 +181,31 @@ const Address = forwardRef((props, ref) => {
     return () => {
       document.removeEventListener("click", closeDropdown);
     };
-  }, [isCountryOpen, isStateOpen]);
+  }, [isCountryOpen, isStateOpen, isCitiesOpen]);
 
   return (
     <div
       className={`${
         currentStep === 2
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center  "
+            ? " slide-in-right "
+            : "slide-in-left"
           : "hidden"
-      } py-4 2xl:py-10 gap-5  px-7`}>
-      <div className="flex gap-4 justify-center items-center text-slate-500">
-        <img src={addressImg} alt="addressImg" className="w-8 h-8" />
+      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
+      <div className="flex gap-4   text-slate-500">
+        <img src={addressImg} alt="addressImg" className="w-7 h-7" />
         <h2 className="text-xl font-bold ">Address</h2>
       </div>
 
       <form
-        className="w-full h-fit  grid grid-cols-2 gap-2 2xl:gap-x-12 text-sm 2xl:text-lg font-normal"
-        autocomplete="nope">
-        <div className=" relative" id="country-dropdown">
-          <label htmlFor="country" className="block text-gray-700 ">
+        className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 "
+        autoComplete="nope">
+        <div
+          className="h-fit flex flex-col gap-1 relative"
+          id="country-dropdown">
+          <label
+            htmlFor="country"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
           <input
@@ -219,11 +221,8 @@ const Address = forwardRef((props, ref) => {
             autoComplete="nope"
             onClick={() => setIsCountryOpen(true)}
           />
-          {/* {errors.country && (
-            <div className="text-red-500 text-xs">{errors.country}</div>
-          )} */}
           {isCountryOpen && (
-            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-14">
               {filteredCountries.map((item) => (
                 <div
                   key={item.id}
@@ -235,8 +234,10 @@ const Address = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        <div className="mb-4 relative" id="state-dropdown">
-          <label htmlFor="state" className="block text-gray-700  ">
+        <div className="h-fit flex flex-col gap-1 relative" id="state-dropdown">
+          <label
+            htmlFor="state"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State/Province
           </label>
           <input
@@ -252,11 +253,8 @@ const Address = forwardRef((props, ref) => {
             autoComplete="nope"
             onClick={() => setIsStateOpen(true)}
           />
-          {/* {errors.state && (
-            <div className="text-red-500 text-xs">{errors.state}</div>
-          )} */}
           {isStateOpen && (
-            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-14">
               {states.map((item) => (
                 <div
                   key={item.id}
@@ -268,8 +266,10 @@ const Address = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        <div className="">
-          <label htmlFor="zipcode" className="block text-gray-700 ">
+        <div className="h-fit flex flex-col gap-1">
+          <label
+            htmlFor="zipcode"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Zip/Postal Code
           </label>
           <input
@@ -283,12 +283,11 @@ const Address = forwardRef((props, ref) => {
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
           />
-          {/* {errors.zipcode && (
-            <div className="text-red-500 text-xs">{errors.zipcode}</div>
-          )} */}
         </div>
-        <div className=" col-span-1">
-          <label htmlFor="street" className="block text-gray-700  ">
+        <div className="h-fit flex flex-col gap-1 col-span-1">
+          <label
+            htmlFor="street"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Street Address
           </label>
           <input
@@ -302,12 +301,11 @@ const Address = forwardRef((props, ref) => {
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
           />
-          {/* {errors.street && (
-            <div className="text-red-500 text-xs">{errors.street}</div>
-          )} */}
         </div>
-        <div className=" col-span-2 relative">
-          <label htmlFor="citie" className="block text-gray-700  ">
+        <div className="h-fit flex flex-col gap-1 col-span-2 relative">
+          <label
+            htmlFor="citie"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             City
           </label>
           <input
@@ -322,11 +320,8 @@ const Address = forwardRef((props, ref) => {
             autoComplete="nope"
             onClick={() => setIsCitiesOpen(true)}
           />
-          {/* {errors.citie && (
-            <div className="text-red-500 text-xs">{errors.citie}</div>
-          )} */}
           {isCitiesOpen && filteredCities && (
-            <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96 overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-2">
+            <div className="absolute z-10 max-h-32 flex flex-col min-w-56 max-w-96 overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-14">
               {filteredCities.map((item) => (
                 <div
                   key={item.id}
@@ -338,15 +333,16 @@ const Address = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        <div className=" col-span-2">
-          <label htmlFor="landmark" className="block text-gray-700  ">
+        <div className="h-fit flex flex-col gap-1 col-span-2">
+          <label
+            htmlFor="landmark"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Landmark
           </label>
           <input
             type="text"
             id="landmark"
             name="landmark"
-            placeholder="Landmark"
             value={formData.landmark}
             onChange={handleChange}
             className={` ${

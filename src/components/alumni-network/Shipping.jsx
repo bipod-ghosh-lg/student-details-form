@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
@@ -28,33 +33,28 @@ const Shipping = forwardRef((props, ref) => {
       shippingZipcode,
       shippingStreetAddress,
       shippingCitie,
-      shippingLandmark
+      shippingLandmark,
     } = formData;
 
     if (!sameAsAddress) {
       if (!shippingCountry) {
         newErrors.shippingCountry = "Please fill country fields.";
-        
       }
 
       if (!shippingState) {
         newErrors.shippingState = "Please fill state fields.";
-        
       }
 
       if (!shippingZipcode) {
         newErrors.shippingZipcode = "Please fill zip fields.";
-        
       }
 
       if (!shippingStreetAddress) {
         newErrors.shippingStreetAddress = "Please fill street fields.";
-        
       }
 
       if (!shippingCitie) {
         newErrors.shippingCitie = "Please fill city fields.";
-        
       }
 
       if (!shippingLandmark) {
@@ -66,13 +66,10 @@ const Shipping = forwardRef((props, ref) => {
       setErrors({});
       return true;
     }
-
-    
   };
   // useEffect(() => {
   //   validateForm();
   // }, [ sameAsAddress]);
-  
 
   useImperativeHandle(ref, () => ({
     validateForm,
@@ -94,14 +91,14 @@ const Shipping = forwardRef((props, ref) => {
       className={`${
         currentStep === 3
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-auto gap-10"
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
+            ? "slide-in-right "
+            : "slide-in-left"
           : "hidden"
-      } p-5 2xl:py-10 px-7 `}>
-      <div className="flex flex-col md:flex-row gap-5 justify-center items-center text-slate-500">
+      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
+      <div className="flex  md:flex-row gap-4 justify-between items-center text-slate-500">
         <div className="flex gap-4 justify-center items-center">
-          <img src={shippingImg} alt="shippingImg" className="w-8 h-8" />
-          <h2 className="text-2xl font-bold ">Shipping</h2>
+          <img src={shippingImg} alt="shippingImg" className="w-6 h-6" />
+          <h2 className="text-xl font-bold ">Shipping</h2>
         </div>
 
         <div className="h-fit flex items-center gap-2 text-xl font-semibold">
@@ -111,15 +108,17 @@ const Shipping = forwardRef((props, ref) => {
             onChange={handleCheckboxChange}
             className="h-4 w-4 checked:border-white accent-[#00BDD6]"
           />
-          <label className=" text-gray-700">Same as Address</label>
+          <label className=" text-gray-700 text-sm md:text-lg font-semibold">
+            Same as Address
+          </label>
         </div>
       </div>
 
-      <form className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
-        <div className="mb-4">
+      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 ">
+        <div className="h-fit flex flex-col gap-1">
           <label
             htmlFor="shippingCountry"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
           <input
@@ -128,8 +127,12 @@ const Shipping = forwardRef((props, ref) => {
             name="shippingCountry"
             value={sameAsAddress ? formData.country : formData.shippingCountry}
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingCountry ?  "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300  py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : errors.shippingCountry
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />
@@ -137,10 +140,10 @@ const Shipping = forwardRef((props, ref) => {
             <div className="text-red-500 text-xs">{errors.shippingCountry}</div>
           )} */}
         </div>
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
             htmlFor="shippingState"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State/Province
           </label>
           <input
@@ -149,8 +152,12 @@ const Shipping = forwardRef((props, ref) => {
             name="shippingState"
             value={sameAsAddress ? formData.state : formData.shippingState}
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingState ? "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : errors.shippingState
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />
@@ -158,10 +165,10 @@ const Shipping = forwardRef((props, ref) => {
             <div className="text-red-500 text-xs">{errors.shippingState}</div>
           )} */}
         </div>
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
             htmlFor="shippingZipcode"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Zip/Postal Code
           </label>
           <input
@@ -170,8 +177,12 @@ const Shipping = forwardRef((props, ref) => {
             name="shippingZipcode"
             value={sameAsAddress ? formData.zipcode : formData.shippingZipcode}
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingZipcode ? "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : errors.shippingZipcode
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />
@@ -179,10 +190,10 @@ const Shipping = forwardRef((props, ref) => {
             <div className="text-red-500 text-xs">{errors.shippingZipcode}</div>
           )} */}
         </div>
-        <div className="mb-4 col-span-1">
+        <div className="h-fit flex flex-col gap-1 col-span-1">
           <label
             htmlFor="shippingStreetAddress"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Street Address
           </label>
           <input
@@ -193,8 +204,12 @@ const Shipping = forwardRef((props, ref) => {
               sameAsAddress ? formData.street : formData.shippingStreetAddress
             }
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingStreetAddress ? "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? ""
+                : errors.shippingStreetAddress
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />
@@ -204,10 +219,10 @@ const Shipping = forwardRef((props, ref) => {
             </div>
           )} */}
         </div>
-        <div className="mb-4 col-span-2">
+        <div className="h-fit flex flex-col gap-1 col-span-2">
           <label
             htmlFor="shippingCitie"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             City
           </label>
           <input
@@ -216,8 +231,12 @@ const Shipping = forwardRef((props, ref) => {
             name="shippingCitie"
             value={sameAsAddress ? formData.citie : formData.shippingCitie}
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingCitie ? "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : errors.shippingCitie
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />
@@ -225,10 +244,10 @@ const Shipping = forwardRef((props, ref) => {
             <div className="text-red-500 text-xs">{errors.shippingCitie}</div>
           )} */}
         </div>
-        <div className="mb-4 col-span-2">
+        <div className="h-fit flex flex-col gap-1 col-span-2">
           <label
             htmlFor="shippingLandmark"
-            className="block text-gray-700 font-bold mb-2">
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Landmark
           </label>
           <input
@@ -239,8 +258,12 @@ const Shipping = forwardRef((props, ref) => {
               sameAsAddress ? formData.landmark : formData.shippingLandmark
             }
             onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`w-full p-2 rounded-lg ${
-              sameAsAddress ? "bg-gray-200" : errors.shippingLandmark ? "border border-red-500" : ""
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : errors.shippingLandmark
+                ? "border border-red-500"
+                : ""
             }`}
             readOnly={sameAsAddress}
           />

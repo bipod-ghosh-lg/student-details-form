@@ -104,18 +104,18 @@ const Education = forwardRef((props, ref) => {
       className={`${
         currentStep === 6
           ? navigationDirection === "next"
-            ? "h-full w-full slide-in-right flex flex-col justify-center items-center gap-10 "
-            : "h-full w-full slide-in-left flex flex-col justify-center items-center gap-10 "
+            ? " slide-in-right "
+            : "slide-in-left"
           : "hidden"
-      } p-5 2xl:py-10 px-7 `}>
-      <div className="flex gap-4 justify-center items-center text-slate-500">
+      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
+      <div className="flex gap-4   text-slate-500">
         <img src={educationImg} alt="educationImg" className="w-8 h-8" />
-        <h1 className="text-2xl font-bold">Education details</h1>
+        <h1 className="text-xl font-bold">Education details</h1>
       </div>
-      <div className="w-full h-fit content-center grid grid-cols-2 gap-4 2xl:gap-6 text-sm 2xl:text-lg font-semibold">
-        <div className="mb-4">
+      <div className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12">
+        <div className="h-fit flex flex-col gap-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold"
             htmlFor="institution">
             Institution Name
           </label>
@@ -125,7 +125,9 @@ const Education = forwardRef((props, ref) => {
             type="text"
             value={formData.institution}
             onChange={handleChange}
-            className={`${errors.institution && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            className={`${
+              errors.institution && "border border-red-500 "
+            } block w-full rounded-md border-gray-300  py-1 px-2 `}
             required
           />
           {/* {errors.institution && (
@@ -133,9 +135,9 @@ const Education = forwardRef((props, ref) => {
           )} */}
         </div>
 
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold"
             htmlFor="degree">
             Degree
           </label>
@@ -144,7 +146,9 @@ const Education = forwardRef((props, ref) => {
             name="degree"
             value={formData.degree}
             onChange={handleChange}
-            className={`${errors.degree && "border border-red-500 "}shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            className={`${
+              errors.degree && "border border-red-500 "
+            } block w-full rounded-md border-gray-300  py-1 px-2 `}
             required>
             <option value="">Select Degree</option>
             <option value="Bachelors">Bachelors</option>
@@ -156,9 +160,9 @@ const Education = forwardRef((props, ref) => {
           )} */}
         </div>
 
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold"
             htmlFor="fieldOfStudy">
             Field of Study
           </label>
@@ -167,7 +171,9 @@ const Education = forwardRef((props, ref) => {
             name="fieldOfStudy"
             value={formData.fieldOfStudy}
             onChange={handleChange}
-            className={`${errors.fieldOfStudy && "border border-red-500"} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            className={`${
+              errors.fieldOfStudy && "border border-red-500"
+            } block w-full rounded-md border-gray-300  py-1 px-2 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Field of Study</option>
             {fieldsAndCourses.map((fieldObj) => (
@@ -181,9 +187,9 @@ const Education = forwardRef((props, ref) => {
           )} */}
         </div>
 
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold"
             htmlFor="course">
             Course
           </label>
@@ -192,7 +198,9 @@ const Education = forwardRef((props, ref) => {
             name="course"
             value={formData.course}
             onChange={handleChange}
-            className={`${errors.course && "border border-red-500"} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            className={`${
+              errors.course && "border border-red-500"
+            } block w-full rounded-md border-gray-300  py-1 px-2 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Course</option>
             {courses.map((course) => (
@@ -206,9 +214,9 @@ const Education = forwardRef((props, ref) => {
           )} */}
         </div>
 
-        <div className="mb-4">
+        <div className="h-fit flex flex-col gap-1">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold"
             htmlFor="graduationYear">
             Graduation Year
           </label>
@@ -218,7 +226,9 @@ const Education = forwardRef((props, ref) => {
             type="number"
             value={formData.graduationYear}
             onChange={handleChange}
-            className={`${errors.graduationYear && "border border-red-500 "} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+            className={`${
+              errors.graduationYear && "border border-red-500 "
+            }  block w-full rounded-md border-gray-300  py-1 px-2 text-gray-700 `}
             required
           />
           {/* {errors.graduationYear && (
@@ -227,15 +237,19 @@ const Education = forwardRef((props, ref) => {
             </p>
           )} */}
         </div>
-        <div className="h-fit flex flex-col gap-2">
-          <label className="block text-gray-700 text-sm">Country</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+            Country
+          </label>
           <input
             type="text"
             id="educationCountry"
             name="educationCountry"
             value={formData.educationCountry}
             onChange={handleChange}
-            className={` ${errors.educationCountry && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
+            className={` ${
+              errors.educationCountry && "border border-red-500"
+            } block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationCountry && (
             <p className="text-red-500 text-xs italic">
@@ -243,15 +257,20 @@ const Education = forwardRef((props, ref) => {
             </p>
           )} */}
         </div>
-        <div className="h-fit flex flex-col gap-2">
-          <label className="block text-gray-700 text-sm">State</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+            State
+          </label>
+          {console.log(formData.educationState)}
           <input
             type="text"
             id="educationState"
             name="educationState"
             value={formData.educationState}
             onChange={handleChange}
-            className={` ${errors.educationState && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
+            className={` ${
+              errors.educationState && "border border-red-500 "
+            }block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationState && (
             <p className="text-red-500 text-xs italic">
@@ -259,15 +278,19 @@ const Education = forwardRef((props, ref) => {
             </p>
           )} */}
         </div>
-        <div className="h-fit flex flex-col gap-2">
-          <label className="block text-gray-700 text-sm">City</label>
+        <div className="h-fit flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+            City
+          </label>
           <input
             type="text"
             id="educationCitie"
             name="educationCitie"
             value={formData.educationCitie}
             onChange={handleChange}
-            className={` ${errors.educationCitie && "border border-red-500"} block w-full rounded-md border-gray-300 shadow-sm py-2 px-3`}
+            className={` ${
+              errors.educationCitie && "border border-red-500"
+            } block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationCitie && (
             <p className="text-red-500 text-xs italic">

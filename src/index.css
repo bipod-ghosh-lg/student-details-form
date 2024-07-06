@@ -13,7 +13,7 @@ input,
 textarea,
 select {
   outline: none;
-  background-color: rgb(237, 242, 243);
+  background-color: #F3F4F6;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

@@ -2,21 +2,24 @@ import React, { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { nextStep, prevStep } from "../../redux/slice/alumniStepSlice";
+// import { setValidationErrors } from "../../redux/slice/formDataSlice";
 import PersonalInformation from "./PersonalInformation";
 import Address from "./Address";
 import whatsappImg from "../../assets/images/whatsapp.png";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Shipping from "./Shipping";
 import CompanyDetails from "./CompanyDetails";
 import CurrentRole from "./CurrentRole";
 import Education from "./Education";
 import WorkingDetails from "./WorkingDetails";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import "react-toastify/dist/ReactToastify.css";
+import { setValidationErrors } from "../../redux/slice/alumniFormdata";
 
 const AnimatedOutlet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location);
   const addressRef = useRef();
   const personalRef = useRef();
   const shippingRef = useRef();
@@ -27,68 +30,64 @@ const AnimatedOutlet = () => {
   const formData = useSelector((state) => state.formData);
 
   const handleNext = () => {
-    if (
-      currentStep === 1 &&
-      personalRef.current &&
-      personalRef.current.validateForm()
-    ) {
-      dispatch(nextStep());
+    let isValid = true;
+
+    if (currentStep === 1 && personalRef.current) {
+      isValid = personalRef.current.validateForm();
+      dispatch(setValidationErrors({ personal: isValid }));
     }
-    if (
-      currentStep === 2 &&
-      addressRef.current &&
-      addressRef.current.validateForm()
-    ) {
-      dispatch(nextStep());
+    if (currentStep === 2 && addressRef.current) {
+      isValid = addressRef.current.validateForm();
+      dispatch(setValidationErrors({ address: isValid }));
     }
-    if (
-      currentStep === 3 &&
-      shippingRef.current &&
-      shippingRef.current.validateForm()
-    ) {
-      dispatch(nextStep());
+    if (currentStep === 3 && shippingRef.current) {
+      isValid = shippingRef.current.validateForm();
+      dispatch(setValidationErrors({ shipping: isValid }));
     }
-    if (currentStep === 4) {
-      dispatch(nextStep());
+    if (currentStep === 5 && roleRef.current) {
+      isValid = roleRef.current.validateForm();
+      dispatch(setValidationErrors({ role: isValid }));
     }
-    if (
-      currentStep === 5 &&
-      roleRef.current &&
-      roleRef.current.validateForm()
-    ) {
-      dispatch(nextStep());
+    if (currentStep === 6 && educationRef.current) {
+      isValid = educationRef.current.validateForm();
+      
+      dispatch(setValidationErrors({ education: isValid }));
+      
+      // if (formData.currentRole === "student") {
+      //   isValid = true;
+      // }
     }
-    if (
-      currentStep === 6 &&
-      educationRef.current &&
-      educationRef.current.validateForm()
-    ) {
-      if (formData.currentRole === "employer") dispatch(nextStep());
+    if (currentStep === 7 && workingRef.current) {
+      isValid = workingRef.current.validateForm();
+      dispatch(setValidationErrors({ working: isValid }));
     }
-    if (
-      currentStep === 7 &&
-      workingRef.current &&
-      workingRef.current.validateForm()
-    ) {
-      dispatch(nextStep());
-    }
-    
+
+    dispatch(nextStep());
   };
 
   const handlePrev = () => {
+    // dispatch(setValidationErrors({ submitClicked: false }));
     dispatch(prevStep());
   };
 
+  const handleSubmit = () => {
+    const validationErrors = formData.validationErrors;
+    dispatch(setValidationErrors({ submitClicked: true }));
+
+    // Handle form submission
+    console.log("Form submitted successfully:", formData);
+  };
+
   return (
-    <div className="h-full w-full max-w-4xl mx-auto flex flex-col  items-center  overflow-hidden">
-      <div className="h-[15vh] w-full flex items-center justify-center">
-        <h1 className=" md:text-xl 2xl:text-3xl font-bold text-center">
+    <div className="h-full w-full max-w-5xl mx-auto flex flex-col items-center overflow-hidden">
+      <div className="px-10 py-5 md:py-4 xl:py-10 2xl:py-16 2xl:p-20 w-full flex items-center justify-center">
+        <h1 className="text-md md:text-xl xl:text-2xl 2xl:text-3xl font-semibold text-center">
           Get Your Alumni Network Today
         </h1>
       </div>
 
-      <div className="h-fit w-fit flex flex-col gap-8 ">
-        <div className="h-fit min-h-[20vh] 2xl:max-h-[60vh] w-[90vw] md:w-[80%] 2xl:w-[45vw] mx-auto md:px-3 bg-white border  rounded-lg flex justify-center items-center overflow-y-auto overflow-x-hidden ">
+      <div className="h-fit flex flex-col gap-4 2xl:gap-8 min-h-[20vh] 2xl:max-h-[60vh] w-[90vw] md:w-[60vw] 2xl:w-[50vw] mx-auto">
+        <div className="h-fit w-full bg-white border rounded-lg flex justify-center items-center overflow-y-auto overflow-x-hidden">
           <PersonalInformation ref={personalRef} />
           <Address ref={addressRef} />
           <Shipping ref={shippingRef} />
@@ -99,30 +98,37 @@ const AnimatedOutlet = () => {
             <WorkingDetails ref={workingRef} />
           )}
         </div>
-        <div className="w-[90vw] md:w-[80%] flex justify-between items-center 2xl:w-[45vw] text-white">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className={`p-2 rounded bg-[#00BDD6] ${
-              currentStep <= 1 ? "hidden" : "w-[40%]"
-            } col-span-2`}>
-            Back
-          </button>
-          <button
-            type="submit"
-            onClick={handleNext}
-            className={`p-2 rounded ${
-              formData.stepLength === currentStep
-                ? "bg-blue-500"
-                : "bg-[#00BDD6]"
-            }  ${currentStep <= 1 ? "w-full" : "w-[40%]"} col-span-2`}>
-            {formData.stepLength === currentStep ? "Submit" : "Next"}
-          </button>
+        <div className="w-full flex-col flex justify-between items-center text-white">
+          {currentStep === formData.stepLength ? (
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
+              Submit
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={
+                currentStep === formData.stepLength ? handleSubmit : handleNext
+              }
+              className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
+              Next
+            </button>
+          )}
         </div>
+        <button
+          type="button"
+          onClick={handlePrev}
+          className={`${currentStep <= 1 ? "hidden" : "w-[40%] flex gap-2"}`}>
+          <IoMdArrowRoundBack size={25} />
+          Back
+        </button>
         <div className="absolute h-10 w-10 bottom-5 md:bottom-10 right-10 cursor-pointer">
-          <img src={whatsappImg} alt="" className="" />
+          <img src={whatsappImg} alt="" />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
