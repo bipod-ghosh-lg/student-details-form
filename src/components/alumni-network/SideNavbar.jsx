@@ -11,8 +11,15 @@ const SideNavbar = () => {
     (state) => state.stepsSlice
   );
   const formData = useSelector((state) => state.formData);
-  const { personal, address, shipping, role, education, working,submitClicked } =
-    formData.validationErrors;
+  const {
+    personal,
+    address,
+    shipping,
+    role,
+    education,
+    working,
+    submitClicked,
+  } = formData.validationErrors;
 
   const dispatch = useDispatch();
 
@@ -24,7 +31,7 @@ const SideNavbar = () => {
     "Current Role",
     "Education",
   ];
-const company = true;
+  const company = true;
   const formValidationArray = [
     personal,
     address,
@@ -33,7 +40,7 @@ const company = true;
     role,
     education,
     working,
-  ]
+  ];
 
   // Conditionally add the "Employer Details" step
   const steps =
@@ -91,9 +98,7 @@ const company = true;
               {console.log(formValidationArray[index])}
               <p
                 className={`text-sm ${
-                  !formValidationArray[index] &&
-                  index  < currentStep &&
-                  submitClicked
+                  !formValidationArray[index] && submitClicked
                     ? "text-red-500"
                     : ""
                 }`}>

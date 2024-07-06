@@ -31,6 +31,7 @@ const AnimatedOutlet = () => {
 
   const handleNext = () => {
     let isValid = true;
+    console.log(currentStep)
 
     if (currentStep === 1 && personalRef.current) {
       isValid = personalRef.current.validateForm();
@@ -59,6 +60,7 @@ const AnimatedOutlet = () => {
     }
     if (currentStep === 7 && workingRef.current) {
       isValid = workingRef.current.validateForm();
+      console.log(isValid, "working");
       dispatch(setValidationErrors({ working: isValid }));
     }
 
