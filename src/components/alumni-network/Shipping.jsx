@@ -95,8 +95,8 @@ const Shipping = forwardRef((props, ref) => {
             : "slide-in-left"
           : "hidden"
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
-      <div className="flex  md:flex-row gap-4 justify-between items-center text-slate-500">
-        <div className="flex gap-4 justify-center items-center">
+      <div className="flex flex-col   gap-4 justify-between  text-slate-500">
+        <div className="flex gap-4  ">
           <img src={shippingImg} alt="shippingImg" className="w-6 h-6" />
           <h2 className="text-xl font-bold ">Shipping</h2>
         </div>

@@ -100,7 +100,7 @@ const WorkingDetails = forwardRef((props, ref) => {
             value={formData.workingCompany}
             onChange={handleChange}
             className={` block w-full rounded-md border-gray-300  py-1 px-2 ${
-              errors.workingCompany && "border border-red-500"
+              errors.workingCompany && "border border-red-500 "
             }`}
           />
           {/* {errors.workingCompany && (

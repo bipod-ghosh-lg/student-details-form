@@ -97,6 +97,7 @@ const Education = forwardRef((props, ref) => {
     const { name, value } = e.target;
     dispatch(updateFormData({ [name]: value }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+    validateForm()
   };
 
   return (
@@ -261,7 +262,7 @@ const Education = forwardRef((props, ref) => {
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State
           </label>
-          {console.log(formData.educationState)}
+          {/* {console.log(formData.educationState)} */}
           <input
             type="text"
             id="educationState"

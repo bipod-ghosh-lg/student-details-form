@@ -23,6 +23,7 @@ const PersonalInformation = forwardRef((props, ref) => {
 
     if (name === "phone" && sameAsPhone) {
       dispatch(updateFormData({ whatsapp: value }));
+      setErrors((prevErrors) => ({ ...prevErrors, ["whatsapp"]: "" }));
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
@@ -60,12 +61,16 @@ const PersonalInformation = forwardRef((props, ref) => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Please enter a valid email address.";
     }
+    
     if (!phone) {
       newErrors.phone = "Please fill in the Phone Number.";
     }
     if (!whatsapp) {
       newErrors.whatsapp = "Please fill in the WhatsApp Number.";
     }
+    // if (sameAsPhone || phone) {
+    //   setErrors((prevErrors) => ({ ...prevErrors, ["whatsapp"]: "" }));
+    // }
     if (!dob) {
       newErrors.dob = "Please fill in the Date of Birth.";
     }

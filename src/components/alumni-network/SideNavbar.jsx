@@ -7,9 +7,9 @@ import { TbProgressCheck } from "react-icons/tb";
 import { FaRegDotCircle } from "react-icons/fa";
 
 const SideNavbar = () => {
-  const { currentStep, completedSteps } = useSelector(
-    (state) => state.stepsSlice
-  );
+  const stepRefs = useRef([]);
+  const { currentStep } = useSelector((state) => state.stepsSlice);
+
   const formData = useSelector((state) => state.formData);
   const {
     personal,
@@ -48,8 +48,6 @@ const SideNavbar = () => {
       ? [...baseSteps, "Employer Details"]
       : baseSteps;
 
-  const stepRefs = useRef([]);
-
   useEffect(() => {
     dispatch(updateFormData({ stepLength: steps.length }));
   }, [steps.length]);
@@ -63,6 +61,10 @@ const SideNavbar = () => {
       });
     }
   }, [currentStep]);
+
+  const handledSetStep = (step) => {
+    dispatch(setStep(step));
+  };
 
   return (
     <div className="p-3 2xl:py-6 2xl:px-8 flex flex-col justify-between bg-[#FAFAFC] shadow-md  w-full h-full md:min-h-full text-nowrap">
@@ -83,7 +85,7 @@ const SideNavbar = () => {
               className={`p-2 flex items-center gap-2 cursor-pointer ${
                 index + 1 === currentStep ? "font-bold text-[#00BDD6]" : ""
               }`}
-              onClick={() => dispatch(setStep(index + 1))}>
+              onClick={() => handledSetStep(index + 1)}>
               {index + 1 < currentStep ? (
                 <TbProgressCheck size={25} />
               ) : index + 1 === currentStep ? (
@@ -95,10 +97,11 @@ const SideNavbar = () => {
                   className="h-4 w-4 accent-[#00BDD5] border-4 !border-white"
                 />
               )}
-              {console.log(formValidationArray[index])}
+              {/* {console.log(formValidationArray[currentStep])} */}
+                
               <p
                 className={`text-sm ${
-                  !formValidationArray[index] && submitClicked
+                  !formValidationArray[index] &&  submitClicked
                     ? "text-red-500"
                     : ""
                 }`}>

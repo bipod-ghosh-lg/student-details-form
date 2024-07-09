@@ -71,8 +71,7 @@ const formDataSlice = createSlice({
       console.log(action.payload);
       state.validationErrors = { ...state.validationErrors, ...action.payload };
     },
-
-
+    
   },
 });
 

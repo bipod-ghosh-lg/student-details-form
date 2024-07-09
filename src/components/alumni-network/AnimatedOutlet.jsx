@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { nextStep, prevStep } from "../../redux/slice/alumniStepSlice";
-// import { setValidationErrors } from "../../redux/slice/formDataSlice";
+import { nextStep, prevStep, setStep } from "../../redux/slice/alumniStepSlice";
+import { setValidationErrors } from "../../redux/slice/alumniFormdata";
 import PersonalInformation from "./PersonalInformation";
 import Address from "./Address";
 import whatsappImg from "../../assets/images/whatsapp.png";
@@ -14,7 +14,6 @@ import Education from "./Education";
 import WorkingDetails from "./WorkingDetails";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import "react-toastify/dist/ReactToastify.css";
-import { setValidationErrors } from "../../redux/slice/alumniFormdata";
 
 const AnimatedOutlet = () => {
   const dispatch = useDispatch();
@@ -29,56 +28,116 @@ const AnimatedOutlet = () => {
   const { currentStep } = useSelector((state) => state.stepsSlice);
   const formData = useSelector((state) => state.formData);
 
-  const handleNext = () => {
+  
+  
+
+  const validateCurrentStep = async () => {
     let isValid = true;
-    console.log(currentStep)
-
-    if (currentStep === 1 && personalRef.current) {
-      isValid = personalRef.current.validateForm();
-      dispatch(setValidationErrors({ personal: isValid }));
+    switch (currentStep) {
+      case 1:
+        if (personalRef.current) {
+          isValid = await personalRef.current.validateForm();
+          dispatch(setValidationErrors({ personal: isValid }));
+        }
+        break;
+      case 2:
+        if (addressRef.current) {
+          isValid = await addressRef.current.validateForm();
+          dispatch(setValidationErrors({ address: isValid }));
+        }
+        break;
+      case 3:
+        if (shippingRef.current) {
+          isValid = await shippingRef.current.validateForm();
+          dispatch(setValidationErrors({ shipping: isValid }));
+        }
+        break;
+      case 5:
+        if (roleRef.current) {
+          isValid = await roleRef.current.validateForm();
+          dispatch(setValidationErrors({ role: isValid }));
+        }
+        break;
+      case 6:
+        if (educationRef.current) {
+          isValid = await educationRef.current.validateForm();
+          dispatch(setValidationErrors({ education: isValid }));
+        }
+        break;
+      case 7:
+        if (workingRef.current) {
+          console.log("workingRef.current", workingRef.current);
+          isValid = await workingRef.current.validateForm();
+          dispatch(setValidationErrors({ working: isValid }));
+        }
+        break;
+      default:
+        break;
     }
-    if (currentStep === 2 && addressRef.current) {
-      isValid = addressRef.current.validateForm();
-      dispatch(setValidationErrors({ address: isValid }));
-    }
-    if (currentStep === 3 && shippingRef.current) {
-      isValid = shippingRef.current.validateForm();
-      dispatch(setValidationErrors({ shipping: isValid }));
-    }
-    if (currentStep === 5 && roleRef.current) {
-      isValid = roleRef.current.validateForm();
-      dispatch(setValidationErrors({ role: isValid }));
-    }
-    if (currentStep === 6 && educationRef.current) {
-      isValid = educationRef.current.validateForm();
-      
-      dispatch(setValidationErrors({ education: isValid }));
-      
-      // if (formData.currentRole === "student") {
-      //   isValid = true;
-      // }
-    }
-    if (currentStep === 7 && workingRef.current) {
-      isValid = workingRef.current.validateForm();
-      console.log(isValid, "working");
-      dispatch(setValidationErrors({ working: isValid }));
-    }
-
-    dispatch(nextStep());
+    return isValid;
   };
 
+  const handleNext = async () => {
+    const isValid = await validateCurrentStep();
+    // if (isValid) {
+      dispatch(nextStep());
+    // }
+  };
+
+  useEffect(() => {
+    if (formData.validationErrors.submitClicked) {
+      validateCurrentStep();
+    }
+  }, [currentStep]);
+
   const handlePrev = () => {
-    // dispatch(setValidationErrors({ submitClicked: false }));
     dispatch(prevStep());
   };
 
-  const handleSubmit = () => {
-    const validationErrors = formData.validationErrors;
-    dispatch(setValidationErrors({ submitClicked: true }));
+  useEffect(() => {}, [formData.validationErrors.submitClicked]);
 
-    // Handle form submission
-    console.log("Form submitted successfully:", formData);
+  const handleSubmit = async () => {
+    dispatch(setValidationErrors({ submitClicked: true }));
+    const validationErrors = formData.validationErrors;
+
+    let isValid = await validateCurrentStep();
+
+    if (formData.currentRole === "employer") {
+      if (
+        !validationErrors.personal ||
+        !validationErrors.address ||
+        !validationErrors.shipping ||
+        !validationErrors.role ||
+        !validationErrors.education ||
+        !validationErrors.working
+      ) {
+        console.log("Please fill all the required fields.");
+        
+      } else {
+        console.log("Form submitted successfully:", formData);
+      }
+    } else {
+      if (
+        !validationErrors.personal ||
+        !validationErrors.address ||
+        !validationErrors.shipping ||
+        !validationErrors.role ||
+        !validationErrors.education
+      ) {
+        console.log(validationErrors.education);
+        console.log("Please fill all the required fields.");
+        
+      } else {
+        console.log("Form submitted successfully:", formData);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (currentStep === formData.stepLength) {
+      handleSubmit();
+    }
+  }, [formData.validationErrors.submitClicked]);
 
   return (
     <div className="h-full w-full max-w-5xl mx-auto flex flex-col items-center overflow-hidden">
@@ -101,23 +160,14 @@ const AnimatedOutlet = () => {
           )}
         </div>
         <div className="w-full flex-col flex justify-between items-center text-white">
-          {currentStep === formData.stepLength ? (
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
-              Submit
-            </button>
-          ) : (
-            <button
-              type="submit"
-              onClick={
-                currentStep === formData.stepLength ? handleSubmit : handleNext
-              }
-              className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
-              Next
-            </button>
-          )}
+          <button
+            type="submit"
+            onClick={
+              currentStep === formData.stepLength ? handleSubmit : handleNext
+            }
+            className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
+            {currentStep === formData.stepLength ? "Submit" : "Next"}
+          </button>
         </div>
         <button
           type="button"
@@ -127,7 +177,7 @@ const AnimatedOutlet = () => {
           Back
         </button>
         <div className="absolute h-10 w-10 bottom-5 md:bottom-10 right-10 cursor-pointer">
-          <img src={whatsappImg} alt="" />
+          <img src={whatsappImg} alt="WhatsApp" />
         </div>
       </div>
       <ToastContainer />

@@ -74,44 +74,17 @@ const Address = forwardRef((props, ref) => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
+  useEffect(() => {
+    console.log(formData.state)
+    if (formData.state) {
+      setErrors({ ...errors, state: "" });
+    }
+  }, [formData.state]);
 
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    dispatch(updateFormData({ [name]: value }));
-
-    if (name === "country") {
-      if (value) {
-        const filtered = countries.filter((country) =>
-          country.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredCountries(filtered);
-      } else {
-        setFilteredCountries(countries);
-      }
-      setIsCountryOpen(true);
-    }
-    if (name === "citie") {
-      if (value) {
-        const filtered = cities.filter((city) =>
-          city.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredCities(filtered);
-      } else {
-        setFilteredCities(cities);
-      }
-      setIsCitiesOpen(true);
-    }
-
-    // Clear error message when user starts typing
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: undefined,
-    }));
-  };
 
   const getCountry = async () => {
     try {
@@ -183,6 +156,44 @@ const Address = forwardRef((props, ref) => {
     };
   }, [isCountryOpen, isStateOpen, isCitiesOpen]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateFormData({ [name]: value }));
+
+    if (name === "country") {
+      if (value) {
+        const filtered = countries.filter((country) =>
+          country.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredCountries(filtered);
+      } else {
+        setFilteredCountries(countries);
+      }
+      setIsCountryOpen(true);
+    }
+    if (name === "citie") {
+      if (value) {
+        const filtered = cities.filter((city) =>
+          city.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredCities(filtered);
+      } else {
+        setFilteredCities(cities);
+      }
+      setIsCitiesOpen(true);
+    }
+
+    // Clear error message when user starts typing
+    setErrors((prevErrors) => {
+      console.log(prevErrors);
+      console.log(name)
+      return ({
+        ...prevErrors,
+        [name]: undefined,
+      });
+    });
+  };
+
   return (
     <div
       className={`${
@@ -248,7 +259,7 @@ const Address = forwardRef((props, ref) => {
             onChange={handleChange}
             readOnly
             className={`${
-              errors.state ? "border border-red-500" : ""
+              errors.state ? " border border-red-500" : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
             onClick={() => setIsStateOpen(true)}
