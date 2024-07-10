@@ -4,7 +4,7 @@ import { ImExit } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowBack } from "react-icons/io";
 import { prevStep } from "../../redux/slice/alumniStepSlice";
-import { submitForm } from "../../redux/slice/alumniFormdata";
+import { setValidationErrors, submitForm } from "../../redux/slice/alumniFormdata";
 
 const Header = () => {
   const { currentStep } = useSelector((state) => state.stepsSlice);
@@ -23,8 +23,46 @@ const Header = () => {
   const handlePrev = () => {
     dispatch(prevStep());
   };
-  const handlesubmit = () => {
-    dispatch(submitForm());
+  const handlesubmit = async () => {
+    // dispatch(submitForm());
+    dispatch(setValidationErrors({ submitClicked: true }));
+    const validationErrors = formData.validationErrors;
+
+    // let isValid = await validateCurrentStep();
+
+    if (formData.currentRole === "employer") {
+      if (
+        !formData.personalValidationErrors ||
+        !formData.addressValidationErrors ||
+        !formData.shippingValidationErrors ||
+        !formData.currentRoleValidationErrors ||
+        !formData.educationValidationErrors ||
+        !formData.workingValidationErrors
+
+      ) {
+        console.log("Please fill all the required fields.");
+      } else {
+        console.log("Form submitted successfully:", formData);
+      }
+    }
+
+    if (formData.currentRole === "student") {
+
+      console.log("come from useeffect", formData.currentRole);
+
+      if (
+        !formData.personalValidationErrors ||
+        !formData.addressValidationErrors ||
+        !formData.shippingValidationErrors ||
+        !formData.currentRoleValidationErrors ||
+        !formData.educationValidationErrors
+      ) {
+        console.log(validationErrors.education);
+        console.log("Please fill all the required fields.");
+      } else {
+        console.log("Form submitted successfully:", formData);
+      }
+    }
   };
   return (
     <div className="w-full h-full shadow-md  flex justify-between items-center py-4 px-8 relative z-10">

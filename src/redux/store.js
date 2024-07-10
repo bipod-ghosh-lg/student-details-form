@@ -4,6 +4,8 @@ import formReducer from "./slice/formSlice";
 import loginReducer from "./slice/loginSlice";
 import stepSliceReducer from "./slice/alumniStepSlice";
 import formDataReducer from "./slice/alumniFormdata";
+import locationReducer from "./slice/locationSlice";
+
 
 
 const store = configureStore({
@@ -12,6 +14,7 @@ const store = configureStore({
     login: loginReducer,
     stepsSlice: stepSliceReducer,
     formData: formDataReducer,
+    location: locationReducer,
   },
 });
 

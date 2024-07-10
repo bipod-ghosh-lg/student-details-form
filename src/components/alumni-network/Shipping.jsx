@@ -9,12 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import shippingImg from "../../assets/images/store.png";
 import { FaMapLocationDot } from "react-icons/fa6";
+import LocationSelector from "./LocationSelector";
 
 const Shipping = forwardRef((props, ref) => {
   const [sameAsAddress, setSameAsAddress] = useState(false); // Default to false initially
   const [errors, setErrors] = useState({});
   const formData = useSelector((state) => state.formData); // Access formData from Redux
-  const navigate = useNavigate();
+  const location = useSelector((state) => state.location);
+  console.log("location", location);
+
   const dispatch = useDispatch();
 
   const { currentStep, navigationDirection } = useSelector(
@@ -29,7 +32,6 @@ const Shipping = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
-   
     const newErrors = {};
     const {
       shippingCountry,
@@ -75,7 +77,6 @@ const Shipping = forwardRef((props, ref) => {
   //   validateForm();
   // }, [ sameAsAddress]);
 
-
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
@@ -92,10 +93,9 @@ const Shipping = forwardRef((props, ref) => {
   };
 
   const handleBlur = (e) => {
-      console.log("from handle blur", validateForm());
-      dispatch(updateFormData({ shippingValidationErrors: validateForm() }));
-      validateForm();
-    
+    console.log("from handle blur", validateForm());
+    dispatch(updateFormData({ shippingValidationErrors: validateForm() }));
+    validateForm();
   };
 
   return (
@@ -120,7 +120,7 @@ const Shipping = forwardRef((props, ref) => {
             type="checkbox"
             checked={sameAsAddress}
             onChange={handleCheckboxChange}
-            className="h-4 w-4 checked:border-white accent-[#00BDD6]"
+            className="h-4 w-4 checked:border-white checked:text-white accent-[#00BDD6]"
           />
           <label className=" text-gray-700 text-sm md:text-lg font-semibold">
             Same as Address
@@ -135,9 +135,9 @@ const Shipping = forwardRef((props, ref) => {
             className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
-          <input
-            type="text"
-            id="shippingCountry"
+          <LocationSelector
+            // type="text"
+            // id="shippingCountry"
             name="shippingCountry"
             value={sameAsAddress ? formData.country : formData.shippingCountry}
             onChange={(e) => !sameAsAddress && handleChange(e)}
@@ -149,6 +149,7 @@ const Shipping = forwardRef((props, ref) => {
                 : ""
             }`}
             readOnly={sameAsAddress}
+            apiEndpoint=""
           />
           {/* {errors.shippingCountry && (
             <div className="text-red-500 text-xs">{errors.shippingCountry}</div>
@@ -160,9 +161,9 @@ const Shipping = forwardRef((props, ref) => {
             className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State/Province
           </label>
-          <input
-            type="text"
-            id="shippingState"
+          <LocationSelector
+            // type="text"
+            // id="shippingState"
             name="shippingState"
             value={sameAsAddress ? formData.state : formData.shippingState}
             onChange={(e) => !sameAsAddress && handleChange(e)}
@@ -174,9 +175,37 @@ const Shipping = forwardRef((props, ref) => {
                 : ""
             }`}
             readOnly={sameAsAddress}
+            apiEndpoint={`/${location.shippingCountryIso2}/states`}
           />
           {/* {errors.shippingState && (
             <div className="text-red-500 text-xs">{errors.shippingState}</div>
+          )} */}
+        </div>
+
+        <div className="h-fit flex flex-col gap-1 col-span-2">
+          <label
+            htmlFor="shippingCitie"
+            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+            City
+          </label>
+          <LocationSelector
+            type="text"
+            id="shippingCitie"
+            name="shippingCitie"
+            value={sameAsAddress ? formData.citie : formData.shippingCitie}
+            onChange={(e) => !sameAsAddress && handleChange(e)}
+            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
+              sameAsAddress
+                ? "bg-gray-200"
+                : submitClicked && errors.shippingCitie
+                ? "border border-red-500"
+                : ""
+            }`}
+            readOnly={sameAsAddress}
+            apiEndpoint={`/${location.shippingCountryIso2}/states/${location.shippingStateIso2}/cities`}
+          />
+          {/* {errors.shippingCitie && (
+            <div className="text-red-500 text-xs">{errors.shippingCitie}</div>
           )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
@@ -235,31 +264,7 @@ const Shipping = forwardRef((props, ref) => {
             </div>
           )} */}
         </div>
-        <div className="h-fit flex flex-col gap-1 col-span-2">
-          <label
-            htmlFor="shippingCitie"
-            className="block text-gray-700 text-sm 2xl:text-md font-semibold">
-            City
-          </label>
-          <input
-            type="text"
-            id="shippingCitie"
-            name="shippingCitie"
-            value={sameAsAddress ? formData.citie : formData.shippingCitie}
-            onChange={(e) => !sameAsAddress && handleChange(e)}
-            className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
-              sameAsAddress
-                ? "bg-gray-200"
-                : submitClicked && errors.shippingCitie
-                ? "border border-red-500"
-                : ""
-            }`}
-            readOnly={sameAsAddress}
-          />
-          {/* {errors.shippingCitie && (
-            <div className="text-red-500 text-xs">{errors.shippingCitie}</div>
-          )} */}
-        </div>
+
         <div className="h-fit flex flex-col gap-1 col-span-2">
           <label
             htmlFor="shippingLandmark"
