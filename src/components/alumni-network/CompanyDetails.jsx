@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import companyImg from "../../assets/images/building.png";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
 
 const CompanyDetails = () => {
   const { currentStep, navigationDirection } = useSelector(
@@ -23,7 +24,8 @@ const CompanyDetails = () => {
           : "hidden"
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
       <div className="flex gap-4  items-center text-slate-500">
-        <img src={companyImg} alt="companyImg" className="w-7 h-7" />
+        {/* <img src={companyImg} alt="companyImg" className="w-7 h-7" /> */}
+        <MdOutlineWorkspacePremium className="text-2xl text-[#00BDD6]"/>
         <h2 className=" text-xl font-bold ">Company Details(if any)</h2>
       </div>
       <div className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 ">

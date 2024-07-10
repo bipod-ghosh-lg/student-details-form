@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoPerson } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +16,7 @@ const PersonalInformation = forwardRef((props, ref) => {
 
   const { currentStep } = useSelector((state) => state.stepsSlice);
   const formData = useSelector((state) => state.formData);
+  const { submitClicked } = formData.validationErrors;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +38,7 @@ const PersonalInformation = forwardRef((props, ref) => {
   };
 
   const validateForm = () => {
+    
     const {
       firstName,
       lastName,
@@ -86,6 +88,19 @@ const PersonalInformation = forwardRef((props, ref) => {
     validateForm,
   }));
 
+  useEffect(() => {
+    console.log(formData.validationErrors);
+  }, []);
+
+  const handleBlur = (e) => {
+    
+      console.log("from handle blur", validateForm());
+      dispatch(updateFormData({ personalValidationErrors: validateForm() }));
+      validateForm();
+    
+      
+  };
+
   return (
     <div
       className={`${
@@ -98,7 +113,9 @@ const PersonalInformation = forwardRef((props, ref) => {
         <h2 className="text-xl font-bold">Personal Information</h2>
       </div>
 
-      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 ">
+      <form
+        className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 "
+        onBlur={handleBlur}>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             First Name
@@ -110,7 +127,7 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={formData.firstName}
             onChange={handleChange}
             className={`${
-              errors.firstName && "border border-red-500"
+              errors.firstName && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
           {/* {errors.firstName && (
@@ -128,7 +145,7 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={formData.lastName}
             onChange={handleChange}
             className={` ${
-              errors.lastName && "border border-red-500"
+              errors.lastName && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
           {/* {errors.lastName && (
@@ -146,7 +163,7 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={formData.email}
             onChange={handleChange}
             className={`${
-              errors.email && "border border-red-500"
+              errors.email && submitClicked && "border border-red-500"
             }  block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
           {/* {errors.email && (
@@ -164,7 +181,7 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={formData.phone}
             onChange={handleChange}
             className={`${
-              errors.phone && "border border-red-500 "
+              errors.phone && submitClicked && "border border-red-500 "
             } block w-full rounded-md border-gray-300 shadow-sm py-1 px-2`}
           />
           {/* {errors.phone && (
@@ -183,7 +200,7 @@ const PersonalInformation = forwardRef((props, ref) => {
             onChange={handleChange}
             disabled={sameAsPhone}
             className={`${
-              errors.whatsapp && "border border-red-500 "
+              errors.whatsapp && submitClicked && "border border-red-500 "
             }block w-full rounded-md  shadow-sm py-1 px-2`}
           />
           {/* {errors.whatsapp && (
@@ -210,7 +227,9 @@ const PersonalInformation = forwardRef((props, ref) => {
             value={formData.dob}
             onChange={handleChange}
             className={`${
-              errors.dob ? "border border-red-500" : "border-gray-300"
+              submitClicked && errors.dob
+                ? "border border-red-500"
+                : "border-gray-300"
             } block w-full rounded-md  shadow-sm py-1 px-2 `}
           />
           {/* {errors.dob && (
@@ -223,7 +242,7 @@ const PersonalInformation = forwardRef((props, ref) => {
           </label>
           <div
             className={`w-full flex gap-4 items-center bg-[#F3F4F6] px-2 py-1 rounded-md ${
-              errors.gender && "border border-red-500  "
+              errors.gender && submitClicked && "border border-red-500  "
             }`}>
             <select
               name="gender"

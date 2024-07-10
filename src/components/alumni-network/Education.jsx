@@ -7,6 +7,7 @@ import React, {
 import { useDispatch, useSelector } from "react-redux";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import educationImg from "../../assets/images/scholarship.png";
+import { PiStudentBold } from "react-icons/pi";
 
 const Education = forwardRef((props, ref) => {
   const formData = useSelector((state) => state.formData); // Access formData from Redux
@@ -15,6 +16,8 @@ const Education = forwardRef((props, ref) => {
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
   );
+
+  const { submitClicked } = formData.validationErrors;
 
   const [courses, setCourses] = useState([]);
   const [errors, setErrors] = useState({});
@@ -100,6 +103,17 @@ const Education = forwardRef((props, ref) => {
     validateForm()
   };
 
+  useEffect(() => {
+    validateForm();
+  }, [submitClicked]);
+
+  const handleBlur = (e) => {
+    
+    console.log("from handle blur", validateForm());
+    dispatch(updateFormData({ educationValidationErrors: validateForm() }));
+    validateForm();
+  };
+
   return (
     <div
       className={`${
@@ -110,10 +124,13 @@ const Education = forwardRef((props, ref) => {
           : "hidden"
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
       <div className="flex gap-4   text-slate-500">
-        <img src={educationImg} alt="educationImg" className="w-8 h-8" />
+        {/* <img src={educationImg} alt="educationImg" className="w-8 h-8" /> */}
+        <PiStudentBold className="text-2xl text-[#00BDD6]" />
         <h1 className="text-xl font-bold">Education details</h1>
       </div>
-      <div className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12">
+      <div
+        className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12"
+        onBlur={handleBlur}>
         <div className="h-fit flex flex-col gap-1">
           <label
             className="block text-gray-700 text-sm 2xl:text-md font-semibold"
@@ -127,7 +144,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.institution}
             onChange={handleChange}
             className={`${
-              errors.institution && "border border-red-500 "
+              errors.institution && submitClicked && "border border-red-500 "
             } block w-full rounded-md border-gray-300  py-1 px-2 `}
             required
           />
@@ -148,7 +165,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.degree}
             onChange={handleChange}
             className={`${
-              errors.degree && "border border-red-500 "
+              errors.degree && submitClicked && "border border-red-500 "
             } block w-full rounded-md border-gray-300  py-1 px-2 `}
             required>
             <option value="">Select Degree</option>
@@ -173,7 +190,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.fieldOfStudy}
             onChange={handleChange}
             className={`${
-              errors.fieldOfStudy && "border border-red-500"
+              errors.fieldOfStudy && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Field of Study</option>
@@ -200,7 +217,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.course}
             onChange={handleChange}
             className={`${
-              errors.course && "border border-red-500"
+              errors.course && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2 leading-tight focus:outline-none focus:shadow-outline`}
             required>
             <option value="">Select Course</option>
@@ -228,7 +245,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.graduationYear}
             onChange={handleChange}
             className={`${
-              errors.graduationYear && "border border-red-500 "
+              errors.graduationYear && submitClicked && "border border-red-500 "
             }  block w-full rounded-md border-gray-300  py-1 px-2 text-gray-700 `}
             required
           />
@@ -249,7 +266,9 @@ const Education = forwardRef((props, ref) => {
             value={formData.educationCountry}
             onChange={handleChange}
             className={` ${
-              errors.educationCountry && "border border-red-500"
+              errors.educationCountry &&
+              submitClicked &&
+              "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationCountry && (
@@ -270,7 +289,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.educationState}
             onChange={handleChange}
             className={` ${
-              errors.educationState && "border border-red-500 "
+              errors.educationState && submitClicked && "border border-red-500 "
             }block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationState && (
@@ -290,7 +309,7 @@ const Education = forwardRef((props, ref) => {
             value={formData.educationCitie}
             onChange={handleChange}
             className={` ${
-              errors.educationCitie && "border border-red-500"
+              errors.educationCitie && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
           />
           {/* {errors.educationCitie && (

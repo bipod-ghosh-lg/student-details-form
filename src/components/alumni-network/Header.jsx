@@ -4,12 +4,27 @@ import { ImExit } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowBack } from "react-icons/io";
 import { prevStep } from "../../redux/slice/alumniStepSlice";
+import { submitForm } from "../../redux/slice/alumniFormdata";
 
 const Header = () => {
   const { currentStep } = useSelector((state) => state.stepsSlice);
+  const formData = useSelector((state) => state.formData);
   const dispatch = useDispatch();
+
+  const baseSteps = [
+    "Personal Information",
+    "Billing",
+    "Shipping",
+    "Company",
+    "Current Role",
+    "Education",
+    "Employer Details",
+  ];
   const handlePrev = () => {
     dispatch(prevStep());
+  };
+  const handlesubmit = () => {
+    dispatch(submitForm());
   };
   return (
     <div className="w-full h-full shadow-md  flex justify-between items-center py-4 px-8 relative z-10">
@@ -33,11 +48,18 @@ const Header = () => {
               : " md:h-full md:w-full md:flex justify-center items-center gap-2"
           } `}>
           <IoIosArrowBack size={15} />
-          Back to previous step
+          Back to {baseSteps[currentStep - 2]} step
         </button>
       </div>
 
       <div className=" flex gap-4 text-sm md:text-base">
+        {currentStep === formData.stepLength && (
+          <button
+            className=" bg-[#00BDD6] px-2 py-1 text-white rounded-md hover:bg-cyan-600 transition duration-700"
+            onClick={handlesubmit}>
+            Save
+          </button>
+        )}
         <button className=" bg-[#00BDD6] px-2 py-1 text-white rounded-md hover:bg-cyan-600 transition duration-700">
           Save Draft
         </button>

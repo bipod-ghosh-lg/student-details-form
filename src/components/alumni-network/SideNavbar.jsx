@@ -12,20 +12,19 @@ const SideNavbar = () => {
 
   const formData = useSelector((state) => state.formData);
   const {
-    personal,
-    address,
-    shipping,
-    role,
-    education,
-    working,
-    submitClicked,
-  } = formData.validationErrors;
+    personalValidationErrors,
+    addressValidationErrors,
+    shippingValidationErrors,
+    currentRoleValidationErrors,
+    educationValidationErrors,
+    workingValidationErrors,
+  } = formData;
 
   const dispatch = useDispatch();
 
   const baseSteps = [
     "Personal Information",
-    "Address",
+    "Billing",
     "Shipping",
     "Company",
     "Current Role",
@@ -33,13 +32,14 @@ const SideNavbar = () => {
   ];
   const company = true;
   const formValidationArray = [
-    personal,
-    address,
-    shipping,
+    personalValidationErrors,
+    addressValidationErrors,
+
+    shippingValidationErrors,
     company,
-    role,
-    education,
-    working,
+    currentRoleValidationErrors,
+    educationValidationErrors,
+    workingValidationErrors,
   ];
 
   // Conditionally add the "Employer Details" step
@@ -98,10 +98,11 @@ const SideNavbar = () => {
                 />
               )}
               {/* {console.log(formValidationArray[currentStep])} */}
-                
+
               <p
                 className={`text-sm ${
-                  !formValidationArray[index] &&  submitClicked
+                  !formValidationArray[index] &&
+                  formData.validationErrors.submitClicked
                     ? "text-red-500"
                     : ""
                 }`}>

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import shippingImg from "../../assets/images/store.png";
+import { FaMapLocationDot } from "react-icons/fa6";
 
 const Shipping = forwardRef((props, ref) => {
   const [sameAsAddress, setSameAsAddress] = useState(false); // Default to false initially
@@ -20,12 +21,15 @@ const Shipping = forwardRef((props, ref) => {
     (state) => state.stepsSlice
   );
 
+  const { submitClicked } = formData.validationErrors;
+
   const handleCheckboxChange = () => {
     setSameAsAddress((prev) => !prev); // Toggle sameAsAddress state
     setErrors({});
   };
 
   const validateForm = () => {
+   
     const newErrors = {};
     const {
       shippingCountry,
@@ -71,6 +75,7 @@ const Shipping = forwardRef((props, ref) => {
   //   validateForm();
   // }, [ sameAsAddress]);
 
+
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
@@ -86,6 +91,13 @@ const Shipping = forwardRef((props, ref) => {
     }));
   };
 
+  const handleBlur = (e) => {
+      console.log("from handle blur", validateForm());
+      dispatch(updateFormData({ shippingValidationErrors: validateForm() }));
+      validateForm();
+    
+  };
+
   return (
     <div
       className={`${
@@ -94,10 +106,12 @@ const Shipping = forwardRef((props, ref) => {
             ? "slide-in-right "
             : "slide-in-left"
           : "hidden"
-      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
+      } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}
+      onBlur={handleBlur}>
       <div className="flex flex-col   gap-4 justify-between  text-slate-500">
         <div className="flex gap-4  ">
-          <img src={shippingImg} alt="shippingImg" className="w-6 h-6" />
+          {/* <img src={shippingImg} alt="shippingImg" className="w-6 h-6" /> */}
+          <FaMapLocationDot className="text-2xl text-[#00BDD6]" />
           <h2 className="text-xl font-bold ">Shipping</h2>
         </div>
 
@@ -130,7 +144,7 @@ const Shipping = forwardRef((props, ref) => {
             className={`block w-full rounded-md border-gray-300  py-1 px-2 ${
               sameAsAddress
                 ? "bg-gray-200"
-                : errors.shippingCountry
+                : submitClicked && errors.shippingCountry
                 ? "border border-red-500"
                 : ""
             }`}
@@ -155,7 +169,7 @@ const Shipping = forwardRef((props, ref) => {
             className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
               sameAsAddress
                 ? "bg-gray-200"
-                : errors.shippingState
+                : submitClicked && errors.shippingState
                 ? "border border-red-500"
                 : ""
             }`}
@@ -172,7 +186,7 @@ const Shipping = forwardRef((props, ref) => {
             Zip/Postal Code
           </label>
           <input
-            type="number"
+            type="text"
             id="shippingZipcode"
             name="shippingZipcode"
             value={sameAsAddress ? formData.zipcode : formData.shippingZipcode}
@@ -180,7 +194,7 @@ const Shipping = forwardRef((props, ref) => {
             className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
               sameAsAddress
                 ? "bg-gray-200"
-                : errors.shippingZipcode
+                : submitClicked && errors.shippingZipcode
                 ? "border border-red-500"
                 : ""
             }`}
@@ -201,13 +215,15 @@ const Shipping = forwardRef((props, ref) => {
             id="shippingStreetAddress"
             name="shippingStreetAddress"
             value={
-              sameAsAddress ? formData.street : formData.shippingStreetAddress
+              sameAsAddress
+                ? formData.streetAddress
+                : formData.shippingStreetAddress
             }
             onChange={(e) => !sameAsAddress && handleChange(e)}
             className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
               sameAsAddress
                 ? ""
-                : errors.shippingStreetAddress
+                : submitClicked && errors.shippingStreetAddress
                 ? "border border-red-500"
                 : ""
             }`}
@@ -234,7 +250,7 @@ const Shipping = forwardRef((props, ref) => {
             className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
               sameAsAddress
                 ? "bg-gray-200"
-                : errors.shippingCitie
+                : submitClicked && errors.shippingCitie
                 ? "border border-red-500"
                 : ""
             }`}
@@ -261,7 +277,7 @@ const Shipping = forwardRef((props, ref) => {
             className={`block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 ${
               sameAsAddress
                 ? "bg-gray-200"
-                : errors.shippingLandmark
+                : submitClicked && errors.shippingLandmark
                 ? "border border-red-500"
                 : ""
             }`}

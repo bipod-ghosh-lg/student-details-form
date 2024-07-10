@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { prevStep } from "../../redux/slice/alumniStepSlice";
 import { FaRegAddressCard } from "react-icons/fa6";
+
 import { instance } from "../../redux/api";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import addressImg from "../../assets/images/location.png";
@@ -27,6 +28,7 @@ const Address = forwardRef((props, ref) => {
   const dispatch = useDispatch();
 
   const formData = useSelector((state) => state.formData);
+  const { submitClicked } = formData.validationErrors;
 
   const handleNext = () => {
     if (validateForm()) {
@@ -45,7 +47,8 @@ const Address = forwardRef((props, ref) => {
 
   const validateForm = () => {
     const newErrors = {};
-    const { country, state, zipcode, street, citie, landmark } = formData;
+    const { country, state, zipcode, streetAddress, citie, landmark } =
+      formData;
 
     if (!country) {
       newErrors.country = "Please fill in the country field.";
@@ -59,8 +62,8 @@ const Address = forwardRef((props, ref) => {
       newErrors.zipcode = "Please fill in the zip code field.";
     }
 
-    if (!street) {
-      newErrors.street = "Please fill in the street address field.";
+    if (!streetAddress) {
+      newErrors.streetAddress = "Please fill in the street address field.";
     }
 
     if (!citie) {
@@ -74,9 +77,9 @@ const Address = forwardRef((props, ref) => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   useEffect(() => {
-    console.log(formData.state)
+    console.log(formData.state);
     if (formData.state) {
       setErrors({ ...errors, state: "" });
     }
@@ -185,13 +188,23 @@ const Address = forwardRef((props, ref) => {
 
     // Clear error message when user starts typing
     setErrors((prevErrors) => {
-      console.log(prevErrors);
-      console.log(name)
-      return ({
+      // console.log(prevErrors);
+      // console.log(name)
+      return {
         ...prevErrors,
         [name]: undefined,
-      });
+      };
     });
+  };
+  useEffect(() => {
+    console.log(formData.validationError);
+    console.log(formData.validationErrors.submitClick);
+  }, []);
+
+  const handleBlur = (e) => {
+    console.log("from handle blur", validateForm());
+    dispatch(updateFormData({ addressValidationErrors: validateForm() }));
+    validateForm();
   };
 
   return (
@@ -203,14 +216,21 @@ const Address = forwardRef((props, ref) => {
             : "slide-in-left"
           : "hidden"
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
-      <div className="flex gap-4   text-slate-500">
-        <img src={addressImg} alt="addressImg" className="w-7 h-7" />
-        <h2 className="text-xl font-bold ">Address</h2>
+      <div className="flex gap-4 items-center  text-slate-500">
+        {/* <img
+          src={addressImg}
+          alt="addressImg"
+          className="w-7 h-7 text-[#00BDD6]"
+          color="text-[#00BDD6]"
+        /> */}
+        <FaRegAddressCard className="text-2xl text-[#00BDD6]" />
+        <h2 className="text-xl font-bold ">Billing</h2>
       </div>
 
       <form
         className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 "
-        autoComplete="nope">
+        autoComplete="nope"
+        onBlur={handleBlur}>
         <div
           className="h-fit flex flex-col gap-1 relative"
           id="country-dropdown">
@@ -227,7 +247,7 @@ const Address = forwardRef((props, ref) => {
             value={formData.country}
             onChange={handleChange}
             className={`${
-              errors.country ? " border border-red-500  " : ""
+              submitClicked && errors.country ? " border border-red-500  " : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
             onClick={() => setIsCountryOpen(true)}
@@ -259,7 +279,7 @@ const Address = forwardRef((props, ref) => {
             onChange={handleChange}
             readOnly
             className={`${
-              errors.state ? " border border-red-500" : ""
+              submitClicked && errors.state ? " border border-red-500" : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
             onClick={() => setIsStateOpen(true)}
@@ -284,31 +304,33 @@ const Address = forwardRef((props, ref) => {
             Zip/Postal Code
           </label>
           <input
-            type="number"
+            type="text"
             id="zipcode"
             name="zipcode"
             value={formData.zipcode}
             onChange={handleChange}
             className={` ${
-              errors.zipcode ? "border border-red-500" : ""
+              submitClicked && errors.zipcode ? "border border-red-500" : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
           />
         </div>
         <div className="h-fit flex flex-col gap-1 col-span-1">
           <label
-            htmlFor="street"
+            htmlFor="streetAddress"
             className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Street Address
           </label>
           <input
             type="text"
-            id="street"
-            name="street"
-            value={formData.street}
+            id="streetAddress"
+            name="streetAddress"
+            value={formData.streetAddress}
             onChange={handleChange}
             className={` ${
-              errors.street ? "border border-red-500" : ""
+              submitClicked && errors.streetAddress
+                ? "border border-red-500"
+                : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
           />
@@ -326,7 +348,7 @@ const Address = forwardRef((props, ref) => {
             value={formData.citie}
             onChange={handleChange}
             className={` ${
-              errors.citie && "border border-red-500"
+              submitClicked && errors.citie && "border border-red-500"
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
             onClick={() => setIsCitiesOpen(true)}
@@ -357,7 +379,7 @@ const Address = forwardRef((props, ref) => {
             value={formData.landmark}
             onChange={handleChange}
             className={` ${
-              errors.landmark ? "border border-red-500" : ""
+              submitClicked && errors.landmark ? "border border-red-500" : ""
             } w-full px-2 py-1 rounded-lg`}
             autoComplete="nope"
           />

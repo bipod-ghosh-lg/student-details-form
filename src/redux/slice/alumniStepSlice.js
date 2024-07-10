@@ -19,6 +19,11 @@ const stepSlice = createSlice({
       state.navigationDirection = "prev";
     },
     setStep: (state, action) => {
+      if (state.currentStep < action.payload) { 
+        state.navigationDirection = "next";
+      } else {
+        state.navigationDirection = "prev";
+      }
       state.currentStep = action.payload;
     },
   },

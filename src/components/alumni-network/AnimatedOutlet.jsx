@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { nextStep, prevStep, setStep } from "../../redux/slice/alumniStepSlice";
-import { setValidationErrors } from "../../redux/slice/alumniFormdata";
+import {
+  setValidationErrors,
+  submitForm,
+  updateFormData,
+} from "../../redux/slice/alumniFormdata";
 import PersonalInformation from "./PersonalInformation";
 import Address from "./Address";
 import whatsappImg from "../../assets/images/whatsapp.png";
@@ -27,9 +31,6 @@ const AnimatedOutlet = () => {
   const workingRef = useRef();
   const { currentStep } = useSelector((state) => state.stepsSlice);
   const formData = useSelector((state) => state.formData);
-
-  
-  
 
   const validateCurrentStep = async () => {
     let isValid = true;
@@ -80,7 +81,7 @@ const AnimatedOutlet = () => {
   const handleNext = async () => {
     const isValid = await validateCurrentStep();
     // if (isValid) {
-      dispatch(nextStep());
+    dispatch(nextStep());
     // }
   };
 
@@ -96,48 +97,61 @@ const AnimatedOutlet = () => {
 
   useEffect(() => {}, [formData.validationErrors.submitClicked]);
 
-  const handleSubmit = async () => {
-    dispatch(setValidationErrors({ submitClicked: true }));
-    const validationErrors = formData.validationErrors;
-
-    let isValid = await validateCurrentStep();
-
-    if (formData.currentRole === "employer") {
-      if (
-        !validationErrors.personal ||
-        !validationErrors.address ||
-        !validationErrors.shipping ||
-        !validationErrors.role ||
-        !validationErrors.education ||
-        !validationErrors.working
-      ) {
-        console.log("Please fill all the required fields.");
-        
-      } else {
-        console.log("Form submitted successfully:", formData);
-      }
-    } else {
-      if (
-        !validationErrors.personal ||
-        !validationErrors.address ||
-        !validationErrors.shipping ||
-        !validationErrors.role ||
-        !validationErrors.education
-      ) {
-        console.log(validationErrors.education);
-        console.log("Please fill all the required fields.");
-        
-      } else {
-        console.log("Form submitted successfully:", formData);
-      }
-    }
-  };
-
   useEffect(() => {
-    if (currentStep === formData.stepLength) {
-      handleSubmit();
-    }
-  }, [formData.validationErrors.submitClicked]);
+    dispatch(
+      updateFormData({
+        workingCompany: "",
+        workingIndustry: "",
+        workingRole: "",
+        workingCountry: "",
+        workingState: "",
+        workingCitie: "",
+        workingValidationErrors: false,
+      })
+    );
+  }, [formData.currentRole]);
+
+  const handleSubmit = async () => {
+    dispatch(submitForm(formData));
+    // dispatch(setValidationErrors({ submitClicked: true }));
+    // const validationErrors = formData.validationErrors;
+
+    // let isValid = await validateCurrentStep();
+
+    // if (formData.currentRole === "employer") {
+    //   if (
+    //     !formData.personalValidationErrors ||
+    //     !formData.addressValidationErrors ||
+    //     !formData.shippingValidationErrors ||
+    //     !formData.currentRoleValidationErrors ||
+    //     !formData.educationValidationErrors ||
+    //     !formData.workingValidationErrors
+
+    //   ) {
+    //     console.log("Please fill all the required fields.");
+    //   } else {
+    //     console.log("Form submitted successfully:", formData);
+    //   }
+    // }
+
+    // if (formData.currentRole === "student") {
+
+    //   console.log("come from useeffect", formData.currentRole);
+
+    //   if (
+    //     !formData.personalValidationErrors ||
+    //     !formData.addressValidationErrors ||
+    //     !formData.shippingValidationErrors ||
+    //     !formData.currentRoleValidationErrors ||
+    //     !formData.educationValidationErrors
+    //   ) {
+    //     console.log(validationErrors.education);
+    //     console.log("Please fill all the required fields.");
+    //   } else {
+    //     console.log("Form submitted successfully:", formData);
+    //   }
+    // }
+  };
 
   return (
     <div className="h-full w-full max-w-5xl mx-auto flex flex-col items-center overflow-hidden">
@@ -160,14 +174,14 @@ const AnimatedOutlet = () => {
           )}
         </div>
         <div className="w-full flex-col flex justify-between items-center text-white">
-          <button
-            type="submit"
-            onClick={
-              currentStep === formData.stepLength ? handleSubmit : handleNext
-            }
-            className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
-            {currentStep === formData.stepLength ? "Submit" : "Next"}
-          </button>
+          {currentStep < formData.stepLength && (
+            <button
+              type="submit"
+              onClick={handleNext}
+              className="p-2 rounded bg-[#00BDD6] w-full col-span-2">
+              Next
+            </button>
+          )}
         </div>
         <button
           type="button"
