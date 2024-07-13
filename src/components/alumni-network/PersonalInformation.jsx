@@ -50,6 +50,7 @@ const PersonalInformation = forwardRef((props, ref) => {
       personalValidationErrors,
     } = formData;
     const newErrors = {};
+    console.log(formData)
 
     if (!firstName) {
       newErrors.firstName = "Please fill in the First Name.";
@@ -93,12 +94,9 @@ const PersonalInformation = forwardRef((props, ref) => {
   }, []);
 
   const handleBlur = (e) => {
-    
       console.log("from handle blur", validateForm());
       dispatch(updateFormData({ personalValidationErrors: validateForm() }));
-      validateForm();
-    
-      
+      validateForm();  
   };
 
   return (

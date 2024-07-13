@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import companyImg from "../../assets/images/building.png";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
+import LocationSelector from "./LocationSelector";
 
 const CompanyDetails = () => {
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
   );
+  const location = useSelector((state) => state.location);
   const formData = useSelector((state) => state.formData);
   const dispatch = useDispatch();
   const handleChange = (e) => {
@@ -25,7 +27,7 @@ const CompanyDetails = () => {
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
       <div className="flex gap-4  items-center text-slate-500">
         {/* <img src={companyImg} alt="companyImg" className="w-7 h-7" /> */}
-        <MdOutlineWorkspacePremium className="text-2xl text-[#00BDD6]"/>
+        <MdOutlineWorkspacePremium className="text-2xl text-[#00BDD6]" />
         <h2 className=" text-xl font-bold ">Company Details(if any)</h2>
       </div>
       <div className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12 ">
@@ -55,56 +57,47 @@ const CompanyDetails = () => {
             className="block w-full rounded-md border-gray-300  py-1 px-2 "
           />
         </div>
-        <div className="h-fit col-span-2 flex flex-col gap-1">
-          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
-            Company Address
-          </label>
-          <input
-            type="text"
-            id="companyAddress"
-            name="companyAddress"
-            value={formData.companyAddress}
-            onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300  py-1 px-2 "
-          />
-        </div>
+
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
-          <input
-            type="email"
+          <LocationSelector
+            type="text"
             id="companyCountry"
             name="companyCountry"
             value={formData.companyCountry}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300  py-1 px-2 "
+            apiEndpoint={""}
+            // className=" block w-full rounded-md border-gray-300  py-1 px-2 "
           />
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State
           </label>
-          <input
-            type="email"
+          <LocationSelector
+            type="text"
             id="companyState"
             name="companyState"
             value={formData.companyState}
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300  py-1 px-2 "
+            apiEndpoint={`/${location.companyDetailsCountryIso2}/states`}
           />
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Citie
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="companyCitie"
             name="companyCitie"
             value={formData.companyCitie}
             onChange={handleChange}
-            className=" block w-full rounded-md border-gray-300  py-1 px-2 "
+            // className=" block w-full rounded-md border-gray-300  py-1 px-2 "
+            apiEndpoint={`/${location.companyDetailsCountryIso2}/states/${location.companyDetailsStateIso2}/cities`}
           />
         </div>
         <div className="h-fit flex flex-col gap-1">
@@ -116,6 +109,19 @@ const CompanyDetails = () => {
             id="companyZipcode"
             name="companyZipcode"
             value={formData.companyZipcode}
+            onChange={handleChange}
+            className=" block w-full rounded-md border-gray-300  py-1 px-2 "
+          />
+        </div>
+        <div className="h-fit col-span-2 flex flex-col gap-1">
+          <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
+            Company Address
+          </label>
+          <input
+            type="text"
+            id="companyAddress"
+            name="companyAddress"
+            value={formData.companyAddress}
             onChange={handleChange}
             className=" block w-full rounded-md border-gray-300  py-1 px-2 "
           />

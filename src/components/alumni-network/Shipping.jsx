@@ -16,7 +16,7 @@ const Shipping = forwardRef((props, ref) => {
   const [errors, setErrors] = useState({});
   const formData = useSelector((state) => state.formData); // Access formData from Redux
   const location = useSelector((state) => state.location);
-  console.log("location", location);
+  // console.log("location", location);
 
   const dispatch = useDispatch();
 
@@ -148,7 +148,9 @@ const Shipping = forwardRef((props, ref) => {
                 ? "border border-red-500"
                 : ""
             }`}
-            readOnly={sameAsAddress}
+            // readOnly={sameAsAddress}
+            onlyRaad={sameAsAddress}
+            error={errors.shippingCountry}
             apiEndpoint=""
           />
           {/* {errors.shippingCountry && (
@@ -174,7 +176,9 @@ const Shipping = forwardRef((props, ref) => {
                 ? "border border-red-500"
                 : ""
             }`}
-            readOnly={sameAsAddress}
+            // readOnly={sameAsAddress}
+            onlyRaad={sameAsAddress}
+            error={errors.shippingState}
             apiEndpoint={`/${location.shippingCountryIso2}/states`}
           />
           {/* {errors.shippingState && (
@@ -201,7 +205,9 @@ const Shipping = forwardRef((props, ref) => {
                 ? "border border-red-500"
                 : ""
             }`}
-            readOnly={sameAsAddress}
+            // readOnly={sameAsAddress}
+            onlyRaad={sameAsAddress}
+            error={errors.shippingCitie}
             apiEndpoint={`/${location.shippingCountryIso2}/states/${location.shippingStateIso2}/cities`}
           />
           {/* {errors.shippingCitie && (

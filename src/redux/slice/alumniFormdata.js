@@ -2,6 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
   stepLength: 7,
   currentStep: 1,
@@ -39,6 +40,7 @@ const initialState = {
   educationCountry: "",
   educationState: "",
   educationCitie: "",
+  educationAddress: "",
   workingCompany: "",
   workingCountry: "",
   workingState: "",
@@ -68,6 +70,7 @@ const formDataSlice = createSlice({
   initialState,
   reducers: {
     updateFormData(state, action) {
+      // console.log("payload", action.payload);
       return {
         ...state,
         ...action.payload,
@@ -75,6 +78,9 @@ const formDataSlice = createSlice({
     },
     resetFormData() {
       return initialState; // Reset form data to initial state
+    },
+    setInstitution(state, action) {
+      state.institution = action.payload;
     },
     setValidationErrors(state, action) {
       state.validationErrors = { ...state.validationErrors, ...action.payload };
@@ -158,6 +164,7 @@ const formDataSlice = createSlice({
         workingCitie,
         workingIndustry,
         workingRole,
+
       } = state;
 
       switch (action.payload.step) {
@@ -249,6 +256,7 @@ export const {
   getFormData,
   submitForm,
   validateForm,
+  setInstitution,
 } = formDataSlice.actions;
 
 export default formDataSlice.reducer;

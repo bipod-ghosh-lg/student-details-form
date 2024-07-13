@@ -89,7 +89,7 @@ const AnimatedOutlet = () => {
     if (formData.validationErrors.submitClicked) {
       validateCurrentStep();
     }
-  }, [currentStep]);
+  }, [currentStep, formData.validationErrors.submitClicked]);
 
   const handlePrev = () => {
     dispatch(prevStep());

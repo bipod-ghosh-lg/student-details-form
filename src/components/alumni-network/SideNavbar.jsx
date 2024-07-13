@@ -86,7 +86,7 @@ const SideNavbar = () => {
                 index + 1 === currentStep ? "font-bold text-[#00BDD6]" : ""
               }`}
               onClick={() => handledSetStep(index + 1)}>
-              {index + 1 < currentStep ? (
+              {index + 1 < currentStep  ? (
                 <TbProgressCheck size={25} />
               ) : index + 1 === currentStep ? (
                 <FaRegDotCircle size={20} />
@@ -117,7 +117,7 @@ const SideNavbar = () => {
           <IoExitOutline />
           <p className="">Logout</p>
         </div>
-        <button className="text-[#00BDD5]">? Help & Feedback</button>
+        <button className="text-[#00BDD5]">Help & Feedback ?</button>
       </div>
     </div>
   );

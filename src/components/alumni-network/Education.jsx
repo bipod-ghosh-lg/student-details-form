@@ -8,14 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
 import educationImg from "../../assets/images/scholarship.png";
 import { PiStudentBold } from "react-icons/pi";
+import LocationSelector from "./LocationSelector";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
 const Education = forwardRef((props, ref) => {
   const formData = useSelector((state) => state.formData); // Access formData from Redux
   const dispatch = useDispatch();
+  const targetRef = React.useRef(null);
 
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
   );
+  const location = useSelector((state) => state.location);
 
   const { submitClicked } = formData.validationErrors;
 
@@ -30,6 +34,12 @@ const Education = forwardRef((props, ref) => {
     { field: "Business", courses: ["Finance", "Marketing", "Management"] },
     { field: "Arts", courses: ["History", "Literature", "Philosophy"] },
   ];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateFormData({ [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
 
   useEffect(() => {
     const selectedField = formData.fieldOfStudy;
@@ -52,39 +62,31 @@ const Education = forwardRef((props, ref) => {
       educationState,
       educationCitie,
     } = formData;
-
+    console.log(formData);
     const newErrors = {};
-
     if (!institution)
       newErrors.institution = "Please fill your institution name.";
     if (!degree) {
       newErrors.degree = "Please fill your degree.";
-      
     }
     if (!fieldOfStudy) {
       newErrors.fieldOfStudy = "Please fill your field.";
-      
     }
     if (!course) {
       newErrors.course = "Please fill your course.";
-      
     }
-    if (!graduationYear){
+    if (!graduationYear) {
       newErrors.graduationYear = "Please fill your graduation year.";
-      
     }
     if (!educationCountry) {
       newErrors.educationCountry = "Please fill your country.";
-      
     }
-      
+
     if (!educationState) {
       newErrors.educationState = "Please fill your state.";
-      
     }
     if (!educationCitie) {
       newErrors.educationCitie = "Please fill your city.";
-      
     }
 
     setErrors(newErrors);
@@ -96,23 +98,22 @@ const Education = forwardRef((props, ref) => {
     validateForm,
   }));
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    dispatch(updateFormData({ [name]: value }));
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    validateForm()
-  };
+  
 
-  useEffect(() => {
-    validateForm();
-  }, [submitClicked]);
+  // useEffect(() => {
+  //   validateForm();
+  // }, [submitClicked, currentStep]);
 
   const handleBlur = (e) => {
-    
     console.log("from handle blur", validateForm());
     dispatch(updateFormData({ educationValidationErrors: validateForm() }));
     validateForm();
   };
+
+  useOutsideClick(targetRef, () => {
+    dispatch(updateFormData({ educationValidationErrors: validateForm() }));
+    validateForm();
+  });
 
   return (
     <div
@@ -128,9 +129,7 @@ const Education = forwardRef((props, ref) => {
         <PiStudentBold className="text-2xl text-[#00BDD6]" />
         <h1 className="text-xl font-bold">Education details</h1>
       </div>
-      <div
-        className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12"
-        onBlur={handleBlur}>
+      <form className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12" onBlur={handleBlur} ref={targetRef}>
         <div className="h-fit flex flex-col gap-1">
           <label
             className="block text-gray-700 text-sm 2xl:text-md font-semibold"
@@ -259,68 +258,61 @@ const Education = forwardRef((props, ref) => {
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="educationCountry"
             name="educationCountry"
             value={formData.educationCountry}
             onChange={handleChange}
-            className={` ${
-              errors.educationCountry &&
-              submitClicked &&
-              "border border-red-500"
-            } block w-full rounded-md border-gray-300  py-1 px-2`}
+            error={errors.educationCountry}
+            apiEndpoint={``}
+            handleValidate={validateForm}
           />
-          {/* {errors.educationCountry && (
-            <p className="text-red-500 text-xs italic">
-              {errors.educationCountry}
-            </p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State
           </label>
-          {/* {console.log(formData.educationState)} */}
-          <input
+
+          <LocationSelector
             type="text"
             id="educationState"
             name="educationState"
             value={formData.educationState}
             onChange={handleChange}
+            error={errors.educationState}
             className={` ${
               errors.educationState && submitClicked && "border border-red-500 "
             }block w-full rounded-md border-gray-300  py-1 px-2`}
+            apiEndpoint={`/${location.educationCountryIso2}/states`}
+            handleValidate={validateForm}
           />
-          {/* {errors.educationState && (
-            <p className="text-red-500 text-xs italic">
-              {errors.educationState}
-            </p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             City
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="educationCitie"
             name="educationCitie"
             value={formData.educationCitie}
             onChange={handleChange}
+            error={errors.educationCitie}
             className={` ${
               errors.educationCitie && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
+            apiEndpoint={`/${location.educationCountryIso2}/states/${location.educationStateIso2}/cities`}
+            handleValidate={validateForm}
           />
-          {/* {errors.educationCitie && (
-            <p className="text-red-500 text-xs italic">
-              {errors.educationCitie}
-            </p>
-          )} */}
         </div>
-      </div>
+      </form>
     </div>
   );
 });
 
 export default Education;
+
+{
+  /*  */
+}

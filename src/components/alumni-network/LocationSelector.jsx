@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { instance } from "../../redux/api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLocation } from "../../redux/slice/locationSlice";
@@ -10,35 +10,33 @@ const LocationSelector = ({
   value,
   onChange,
   apiEndpoint,
-  iso2,
+  error,
+  onlyRaad,
+  handleValidate,
 }) => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const formData = useSelector((state) => state.formData);
+
+  const { submitClicked } = formData.validationErrors;
 
   const dispatch = useDispatch();
-  const targetRef = useRef()
-  const location = useSelector((state) => {
-    return state.location;
-  });
+  const targetRef = useRef();
+  const location = useSelector((state) => state.location);
 
   useOutsideClick(targetRef, () => setIsOpen(false));
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(apiEndpoint, "from fetchData" , name);
-      try {
-        const response = await instance.get(apiEndpoint);
-        setItems(response.data);
-        setFilteredItems(response.data);
-      } catch (error) {
-        console.error(`Error fetching ${name}:`, error);
-      }
-    };
-
-    fetchData();
-  }, [apiEndpoint]);
+  const fetchData = async () => {
+    console.log(apiEndpoint, "from fetchData", name);
+    try {
+      const response = await instance.get(apiEndpoint);
+      setItems(response.data);
+      setFilteredItems(response.data);
+    } catch (error) {
+      // console.error(`Error fetching ${name} for this ${apiEndpoint}:`, error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { value } = e.target;
@@ -57,29 +55,98 @@ const LocationSelector = ({
 
   const handleItemSelect = (item) => {
     console.log(item, "from handleItemSelect");
-    console.log(name)
-    if(name === "addressCountry"){
+    console.log(name);
+    if (name === "addressCountry") {
       dispatch(
         updateLocation({
           addressCountry: item.name,
           addressCountryIso2: item.iso2,
-         
         })
       );
     }
-    if(name === "shippingCountry"){
-      dispatch(updateLocation({ shippingCountry: item.name, shippingCountryIso2: item.iso2}));
+    if (name === "shippingCountry") {
+      dispatch(
+        updateLocation({
+          shippingCountry: item.name,
+          shippingCountryIso2: item.iso2,
+        })
+      );
     }
-    if(name === "addressState"){
-      dispatch(updateLocation({ addressState: item.name, addressStateIso2: item.iso2 }));
+    if (name === "addressState") {
+      dispatch(
+        updateLocation({ addressState: item.name, addressStateIso2: item.iso2 })
+      );
     }
     if (name === "shippingState") {
-      
-      dispatch(updateLocation({ shippingState: item.name, shippingStateIso2: item.iso2 }));
+      dispatch(
+        updateLocation({
+          shippingState: item.name,
+          shippingStateIso2: item.iso2,
+        })
+      );
     }
 
+    if (name === "companyCountry") {
+      dispatch(
+        updateLocation({
+          companyDetailsCountry: item.name,
+          companyDetailsCountryIso2: item.iso2,
+        })
+      );
+    }
+
+    if (name === "companyState") {
+      dispatch(
+        updateLocation({
+          companyDetailsState: item.name,
+          companyDetailsStateIso2: item.iso2,
+        })
+      );
+    }
+
+    if (name === "educationCountry") {
+      dispatch(
+        updateLocation({
+          educationCountry: item.name,
+          educationCountryIso2: item.iso2,
+        })
+      );
+    }
+
+    if (name === "educationState") {
+      dispatch(
+        updateLocation({
+          educationState: item.name,
+          educationStateIso2: item.iso2,
+        })
+      );
+    }
+
+    if (name === "workingCountry") {
+      dispatch(
+        updateLocation({
+          workingCountry: item.name,
+          workingCountryIso2: item.iso2,
+        })
+      );
+    }
+
+    if (name === "workingState") {
+      dispatch(
+        updateLocation({ workingState: item.name, workingStateIso2: item.iso2 })
+      );
+    }
     onChange({ target: { name, value: item.name } });
     setIsOpen(false);
+   
+    
+  };
+
+  const handleInputClick = async () => {
+    if (!isOpen) {
+      await fetchData();
+    }
+    setIsOpen(true);
   };
 
   return (
@@ -95,12 +162,15 @@ const LocationSelector = ({
         name={name}
         value={value}
         onChange={handleInputChange}
-        className="w-full px-2 py-1 rounded-lg"
+        className={`w-full px-2 py-1 rounded-lg ${
+          submitClicked && error && "border border-red-500"
+        }`}
         autoComplete="nope"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleInputClick}
+        readOnly={onlyRaad}
       />
-      {isOpen && filteredItems.length > 0 && (
-        <div className="absolute z-10 max-h-40 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg mt-10 ">
+      {isOpen && !onlyRaad && filteredItems.length > 0 && (
+        <div className="max-h-36 w-full overflow-y-scroll bg-white border border-gray-300 rounded-lg shadow-lg absolute mt-10 z-10">
           {filteredItems.map((item) => (
             <div
               key={item.id}

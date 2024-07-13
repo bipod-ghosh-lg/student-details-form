@@ -1,17 +1,24 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFormData } from "../../redux/slice/alumniFormdata";
-import WorkImg from "../../assets/images/business.png";
 import { MdWorkOutline } from "react-icons/md";
+import LocationSelector from "./LocationSelector";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
 const WorkingDetails = forwardRef((props, ref) => {
-  const formData = useSelector((state) => state.formData); // Access formData from Redux
-  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
-
+  const formData = useSelector((state) => state.formData);
+  const dispatch = useDispatch();
+  const targetRef = React.useRef(null);
   const { currentStep, navigationDirection } = useSelector(
     (state) => state.stepsSlice
   );
+  const location = useSelector((state) => state.location);
   const { submitClicked } = formData.validationErrors;
 
   const industries = [
@@ -27,8 +34,13 @@ const WorkingDetails = forwardRef((props, ref) => {
     "Energy",
   ];
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateFormData({ [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
   const validateForm = () => {
-   
     const {
       workingCompany,
       workingIndustry,
@@ -38,6 +50,14 @@ const WorkingDetails = forwardRef((props, ref) => {
       workingCitie,
     } = formData;
     const newErrors = {};
+    console.log(
+      workingCompany,
+      workingIndustry,
+      workingRole,
+      workingCountry,
+      workingState,
+      workingCitie
+    );
 
     if (!workingCompany) {
       newErrors.workingCompany = "Please fill company name.";
@@ -62,31 +82,39 @@ const WorkingDetails = forwardRef((props, ref) => {
     if (!workingCitie) {
       newErrors.workingCitie = "Please select city.";
     }
+    console.log(newErrors);
 
     setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
+    if (Object.keys(newErrors).length === 0) {
+      dispatch(updateFormData({ workingValidationErrors: true }));
+    }
+      return Object.keys(newErrors).length === 0;
   };
 
   useImperativeHandle(ref, () => ({
     validateForm,
   }));
+
   useEffect(() => {
-    validateForm();
+    if (submitClicked) {
+      validateForm();
+    }
   }, [submitClicked]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    dispatch(updateFormData({ [name]: value }));
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-  };
   const handleBlur = (e) => {
-    
-      console.log("from handle blur", validateForm());
+    console.log("from handle blur", validateForm());
+    dispatch(updateFormData({ workingValidationErrors: validateForm() }));
+    validateForm();  
+  };
+
+ 
+
+  useOutsideClick(targetRef, () => {
+      console.log("from outside click", validateForm());
       dispatch(updateFormData({ workingValidationErrors: validateForm() }));
       validateForm();
-    
-  };
+    })
+  
 
   
 
@@ -100,13 +128,12 @@ const WorkingDetails = forwardRef((props, ref) => {
           : "hidden"
       } py-5 md:py-6 2xl:py-12 h-full w-full  px-7 flex flex-col   gap-4 xl:gap-6 2xl:gap-10`}>
       <div className="flex gap-4  text-slate-500">
-        {/* <img src={WorkImg} alt="titleImg" className="w-7 h-6" /> */}
-        <MdWorkOutline className="text-2xl text-[#00BDD6]"/>
+        <MdWorkOutline className="text-2xl text-[#00BDD6]" />
         <h2 className="text-xl font-bold ">Working Details</h2>
       </div>
-      <div
+      <form
         className="w-full h-fit  grid grid-cols-2 gap-2 md:gap-y-1 xl:gap-y-2 2xl:gap-y-3 gap-x-3 md:gap-x-10 2xl:gap-x-12"
-        onBlur={handleBlur}>
+        onBlur={handleBlur} ref={targetRef}>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Company Name
@@ -121,11 +148,6 @@ const WorkingDetails = forwardRef((props, ref) => {
               errors.workingCompany && submitClicked && "border border-red-500 "
             }`}
           />
-          {/* {errors.workingCompany && (
-            <p className="text-red-500 text-xs italic">
-              {errors.workingCompany}
-            </p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label
@@ -152,11 +174,6 @@ const WorkingDetails = forwardRef((props, ref) => {
               </option>
             ))}
           </select>
-          {/* {errors.workingIndustry && (
-            <p className="text-red-500 text-xs italic">
-              {errors.workingIndustry}
-            </p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
@@ -172,15 +189,12 @@ const WorkingDetails = forwardRef((props, ref) => {
               errors.workingRole && submitClicked && "border border-red-500"
             } bblock w-full rounded-md border-gray-300  py-1 px-2`}
           />
-          {/* {errors.workingRole && (
-            <p className="text-red-500 text-xs italic">{errors.workingRole}</p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             Country
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="workingCountry"
             name="workingCountry"
@@ -189,18 +203,16 @@ const WorkingDetails = forwardRef((props, ref) => {
             className={` ${
               errors.workingCountry && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
+            apiEndpoint={``}
+            error={errors.workingCountry}
+            handleValidate={validateForm}
           />
-          {/* {errors.workingCountry && (
-            <p className="text-red-500 text-xs italic">
-              {errors.workingCountry}
-            </p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             State
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="workingState"
             name="workingState"
@@ -209,16 +221,16 @@ const WorkingDetails = forwardRef((props, ref) => {
             className={`${
               errors.workingState && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
+            apiEndpoint={`/${location.workingCountryIso2}/states`}
+            error={errors.workingState}
+            handleValidate={validateForm}
           />
-          {/* {errors.workingState && (
-            <p className="text-red-500 text-xs italic">{errors.workingState}</p>
-          )} */}
         </div>
         <div className="h-fit flex flex-col gap-1">
           <label className="block text-gray-700 text-sm 2xl:text-md font-semibold">
             City
           </label>
-          <input
+          <LocationSelector
             type="text"
             id="workingCitie"
             name="workingCitie"
@@ -227,12 +239,12 @@ const WorkingDetails = forwardRef((props, ref) => {
             className={`${
               errors.workingCitie && submitClicked && "border border-red-500"
             } block w-full rounded-md border-gray-300  py-1 px-2`}
+            apiEndpoint={`/${location.workingCountryIso2}/states/${location.workingStateIso2}/cities`}
+            error={errors.workingCitie}
+            handleValidate={validateForm}
           />
-          {/* {errors.workingCitie && (
-            <p className="text-red-500 text-xs italic">{errors.workingCitie}</p>
-          )} */}
         </div>
-      </div>
+      </form>
     </div>
   );
 });
